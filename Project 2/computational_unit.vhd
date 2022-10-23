@@ -34,7 +34,7 @@ begin
 			
 			if abs2(z) > threshold then
 				exit algo_1;
-			end if
+			end if;
 			iteration <= iteration + 1;
 		end loop algo_1;
 		

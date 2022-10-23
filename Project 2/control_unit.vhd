@@ -7,7 +7,7 @@ entity control_unit is
 	-- Output ports
 	FPGA_clock:		out	std_logic;
 	reset:			out	std_logic;
-	wren:				out	std_logic
+	wren:			out	std_logic
 end entity control_unit;
 
 architecture logic of control_unit is

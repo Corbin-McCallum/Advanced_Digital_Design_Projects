@@ -4,7 +4,7 @@ use ieee.std_logic_1164.all;
 entity control_unit is
 	generic(
 		lines:	natural 	range 	0 to 479;
-		pixels: natural 	range 	0 to 639;
+		pixels: natural 	range 	0 to 639
 	);
 	port (
 		-- Input ports

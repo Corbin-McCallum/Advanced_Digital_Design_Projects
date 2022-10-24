@@ -14,7 +14,7 @@ entity vga_fsm is
 		reset:			in	std_logic;
 		-- Output ports
 		point:			out	coordinate;
-		point_valid:	out	boolean;
+		point_valid:		out	boolean;
 		h_sync:			out	std_logic;
 		v_sync:			out 	std_logic
 	);
@@ -48,10 +48,5 @@ begin
 	-- Process to set point valid true or flase
 	check_point: process(current_point, vga_res) is
 	begin
-		if point_visible(current_point, vga_res) = '1' then 
-			point_valid <= 1;
-		else
-			point_valid <= 0;
-		end if;
-	end process check_point;
+		point_valid <= point_visible(current_point, vga_res);
 end architecture fsm;

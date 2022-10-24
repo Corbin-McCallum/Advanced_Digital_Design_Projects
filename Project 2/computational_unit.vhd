@@ -27,7 +27,7 @@ begin
 	compute_point: process(c,iterations)
 		z			<= 0;
 		iteration		<= 0;
-		c 			<= ads_cmplx(0.5,0.5);
+		c 			<= ads_cmplx(-0.5,0.5);
 		threshold		<= 2;
 
 		algo_1: while iteration < iterations loop

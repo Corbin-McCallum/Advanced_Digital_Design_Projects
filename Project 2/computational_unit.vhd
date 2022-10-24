@@ -9,10 +9,10 @@ entity computational_unit is
 	port (
 		-- Input ports
 		fpga_clock: 			in 	std_logic;
-		reset:					in		std_logic;
-		seed:						in		ads_complex; --complex #C
+		reset:				in		std_logic;
+		seed:				in		ads_complex; --complex #C
 		-- Output ports
-		done:						out	std_logic;
+		done:				out	std_logic;
 		iteration_count:		out	natural range 0 to iterations - 1;
 	);
 end entity computational_unit;
@@ -20,7 +20,7 @@ end entity computational_unit;
 architecture computation of computational_unit is
 	-- signal threshold:		natural;
 	-- signal c: 				ads_complex;
-	signal z: 				ads_complex;
+	signal z: 		ads_complex;
 	signal iteration: 	natural range 0 to iterations - 1;
 	signal all_done:	std_logic;
 	-- signal iterations:	natural;
@@ -47,6 +47,5 @@ begin
 	
 	iteration_count <= iteration;
 	done <= all_done;
-	
 
 end architecture computation;

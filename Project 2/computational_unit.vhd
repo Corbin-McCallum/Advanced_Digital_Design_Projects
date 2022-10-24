@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity computational_unit is
 	generic(
-		lines:	natural range 0 to 479;
+		lines:		natural range 0 to 479;
 		pixels: 	natural range 0 to 639
 	);
 	port (
@@ -27,7 +27,7 @@ begin
 	compute_point: process(c,iterations)
 		z			<= 0;
 		iteration		<= 0;
-		c 			<= 0;
+		c 			<= ads_cmplx(0.5,0.5);
 
 		algo_1: while iteration < iterations loop
 			z <= ads_square(z);

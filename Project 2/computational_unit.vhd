@@ -9,25 +9,26 @@ entity computational_unit is
 	port (
 		-- Input ports
 		fpga_clock: 			in 	std_logic;
-		reset:					in		std_logic;
+		reset:				in		std_logic;
 		-- Output ports
-		done:						out	std_logic;
+		done:				out	std_logic;
 		itteration_count:		out	std_logic
 	);
 end entity computational_unit;
 
 architecture computation of computational_unit is
-	signal threshold:		natural;
-	signal c: 				ads_complex;
-	signal z: 				ads_complex;
+	signal threshold:	natural;
+	signal c: 		ads_complex;
+	signal z: 		ads_complex;
 	signal iteration: 	natural;
 	signal iterations:	natural;
 begin
 	-- Obtaining a colored point on the Mandelbrot set
 	compute_point: process(c,iterations)
-		z					<= 0;
+		z			<= 0;
 		iteration		<= 0;
-		c 					<= 0;
+		c 			<= 0;
+
 		algo_1: while iteration < iterations loop
 			z <= ads_square(z);
 			Z <= z + c;

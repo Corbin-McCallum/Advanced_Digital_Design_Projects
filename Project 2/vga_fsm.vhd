@@ -14,14 +14,14 @@ entity vga_fsm is
 		reset:			in	std_logic;
 		-- Output ports
 		point:			out	coordinate;
-		point_valid:	out	boolean;
+		point_valid:		out	boolean;
 		h_sync:			out	std_logic;
 		v_sync:			out 	std_logic
 	);
 end entity vga_fsm;
 
 architecture fsm of vga_fsm is
-	signal current_point: corrdiante;
+	signal current_point: coordiante;
 begin
 	-- Process of handling resets and/or getting next corrdinate 
 	count_pixel: process(FPGA_clock, vga_res) is

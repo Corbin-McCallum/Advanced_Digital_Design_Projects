@@ -9,13 +9,13 @@ entity control_unit is
 	);
 	port (
 		-- Input ports
-		done: 				in 	std_logic;
-		iteration_count: 	in		std_logic;
-		seed_limit:			in		std_logic;
+		done: 			in 	std_logic;
+		iteration_count: 	in	std_logic;
+		seed_limit:		in	std_logic;
 		-- Output ports
 		FPGA_clock:		out	std_logic;
 		reset:			out	std_logic;
-		wren:				out 	std_logic;
+		wren:			out 	std_logic;
 	);
 end entity control_unit;
 

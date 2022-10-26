@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity synchronizer is
 	generic (
-		stages: natural := 3;
+		stages: natural := 3
 	);
 	port (
 		clock:	in	std_logic;

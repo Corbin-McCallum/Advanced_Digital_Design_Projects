@@ -6,7 +6,7 @@ use work.project_pkg.all;
 
 entity top_level is
 	generic(
-		lines:	natural range 0 to 479;
+		lines:		natural range 0 to 479;
 		pixels: 	natural range 0 to 639
 	);
 	port (

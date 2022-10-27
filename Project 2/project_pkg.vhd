@@ -39,7 +39,7 @@ package project_pkg is
 	component computational_unit is
 		generic(
 			iterations: positive range 1 to 64:= 32;
-			threshold:	ads_sfixed := to_ads_sfixed(4);
+			threshold:	ads_sfixed := to_ads_sfixed(4)
 		);
 		port (
 			-- Input ports

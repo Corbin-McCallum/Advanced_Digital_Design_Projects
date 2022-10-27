@@ -21,7 +21,7 @@ entity vga_fsm is
 end entity vga_fsm;
 
 architecture fsm of vga_fsm is
-	signal current_point: coordiante;
+	signal current_point: coordinate;
 begin
 	-- Process of handling resets and/or getting next corrdinate 
 	count_pixel: process(FPGA_clock, vga_res) is

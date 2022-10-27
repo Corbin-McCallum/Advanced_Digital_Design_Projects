@@ -1,7 +1,21 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+library vga;
+use vga.vga_data.all;
+
+library ads;
+use ads.ads_fixed.all;
+
+
 package project_pkg is
+
+	type ads_complex is
+	record
+		re: ads_sfixed;
+		im: ads_sfixed;
+	end record ads_complex;
+	
 	---- component declarations
 	component vga_fsm is
 		generic(
@@ -54,7 +68,7 @@ package project_pkg is
 
 	component synchronizer is
 		generic (
-			stages: natural := 3;
+			stages: natural := 3
 		);
 		port (
 			-- Input ports

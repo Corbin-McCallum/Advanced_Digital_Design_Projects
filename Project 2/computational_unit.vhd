@@ -9,8 +9,8 @@ entity computational_unit is
 	port (
 		-- Input ports
 		fpga_clock: 			in 	std_logic;
-		reset:				in		std_logic;
-		seed:				in		ads_complex; --complex #C
+		reset:				in	std_logic;
+		seed:				in	ads_complex; --complex #C
 		-- Output ports
 		done:				out	std_logic;
 		iteration_count:		out	natural range 0 to iterations - 1

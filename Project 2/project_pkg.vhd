@@ -28,11 +28,11 @@ package project_pkg is
 		port (
 			-- Input ports
 			done: 			in 	std_logic;
-			iteration_count: 	in		std_logic;
+			iteration_count: 	in	std_logic;
 			-- Output ports
 			FPGA_clock:		out	std_logic;
 			reset:			out	std_logic;
-			wren:			out std_logic
+			wren:			out 	std_logic
 		);
 	end component control_unit;
 	
@@ -44,11 +44,11 @@ package project_pkg is
 		port (
 			-- Input ports
 			fpga_clock: 			in 	std_logic;
-			reset:				in		std_logic;
-			seed:				in		ads_complex; --complex #C
+			reset:				in	std_logic;
+			seed:				in	ads_complex; --complex #C
 			-- Output ports
 			done:				out	std_logic;
-			iteration_count:		out	natural range 0 to iterations - 1;
+			iteration_count:		out	natural range 0 to iterations - 1
 		);
 	end component computational_unit;
 

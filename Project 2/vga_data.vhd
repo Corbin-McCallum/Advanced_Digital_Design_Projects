@@ -264,4 +264,4 @@ package body vga_data is
 		return do_sync(point, vga_res, vertical);
 	end function do_vertical_sync;
 
-end package body vga_data;
+end package body vga_data; 

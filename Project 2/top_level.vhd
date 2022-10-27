@@ -20,31 +20,31 @@ architecture arch1 of top_level is
 begin
 	
 	signal_driver: vga_fsm
-	port map (
-		-- Input ports
-		FPGA_clock 		=> clock;
-		reset 			=> reset
-		-- Output ports
-		point			=> ;
-		point_valid		=> ;
-		h_sync			=> ;
-		v_sync			=>
-	);
+		port map (
+			-- Input ports
+			FPGA_clock 		=> clock;
+			reset 			=> reset
+			-- Output ports
+			point			=> ;
+			point_valid		=> ;
+			h_sync			=> ;
+			v_sync			=>
+		);
 
 	control:control_unit
-	generic map(
-		threshold 		=> threshold;
-		lines			=> lines;
-		pixels 			=> pixels
-	);
-	port map(
-		-- Input ports
-		done			=> done;
-		iteration_count		=> iteration_count;
-		-- Output ports
-		FPGA_clock		=> clock;
-		reset			=> reset;
-		wren			=> wren
-	);
+		generic map(
+			threshold 		=> threshold;
+			lines			=> lines;
+			pixels 			=> pixels
+		);
+		port map(
+			-- Input ports
+			done			=> done;
+			iteration_count		=> iteration_count;
+			-- Output ports
+			FPGA_clock		=> clock;
+			reset			=> reset;
+			wren			=> wren
+		);
 
 end architecture arch1;

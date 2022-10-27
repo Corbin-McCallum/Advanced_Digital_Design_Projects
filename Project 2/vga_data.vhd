@@ -5,7 +5,7 @@ package vga_data is
 
 	type timing_data is record
 		active:			natural;
-		front_porch:	natural;
+		front_porch:		natural;
 		sync_width:		natural;
 		back_porch:		natural;
 	end record timing_data;
@@ -15,7 +15,7 @@ package vga_data is
 	type vga_timing is record
 		horizontal:		timing_data;
 		vertical:		timing_data;
-		sync_polarity:	polarity;
+		sync_polarity:		polarity;
 	end record vga_timing;
 
 	type coordinate is record

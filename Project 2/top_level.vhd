@@ -25,7 +25,7 @@ begin
 		FPGA_clock 		=> clock;
 		reset 			=> reset
 		-- Output ports
-		point				=> ;
+		point			=> ;
 		point_valid		=> ;
 		h_sync			=> ;
 		v_sync			=>
@@ -33,18 +33,18 @@ begin
 
 	control:control_unit
 	generic map(
-		threshold 	=> threshold;
+		threshold 		=> threshold;
 		lines			=> ;
-		pixels 		=>
+		pixels 			=>
 	);
 	port map(
 		-- Input ports
-		done					=> ;
-		iteration_count	=> ;
+		done			=> ;
+		iteration_count		=> ;
 		-- Output ports
-		FPGA_clock			=> ;
-		reset					=> ;
-		wren					=>
+		FPGA_clock		=> ;
+		reset			=> ;
+		wren			=>
 	);
 
 end architecture arch1;

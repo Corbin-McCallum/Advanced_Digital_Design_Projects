@@ -4,10 +4,10 @@ use ieee.std_logic_1164.all;
 package project_pkg is
 	---- component declarations
 	component vga_fsm is
-		generic (
+		generic(
 			vga_res:	vga_timing := vga_res_default
 		);
-		port (
+		port(
 			-- Input ports
 			FPGA_clock:		in	std_logic;
 			reset:			in	std_logic;
@@ -25,7 +25,7 @@ package project_pkg is
 			lines:		natural 	range 0 to 479;
 			pixels: 	natural 	range 0 to 639
 		);
-		port (
+		port(
 			-- Input ports
 			done: 			in 	std_logic;
 			iteration_count: 	in	std_logic;
@@ -38,18 +38,31 @@ package project_pkg is
 	
 	component computational_unit is
 		generic(
-			iterations: positive range 1 to 64:= 32;
+			iterations: 	positive range 1 to 64:= 32;
 			threshold:	ads_sfixed := to_ads_sfixed(4)
 		);
-		port (
+		port(
 			-- Input ports
-			fpga_clock: 			in 	std_logic;
-			reset:				in	std_logic;
-			seed:				in	ads_complex; --complex #C
+			fpga_clock: 		in 	std_logic;
+			reset:			in	std_logic;
+			seed:			in	ads_complex; --complex #C
 			-- Output ports
-			done:				out	std_logic;
-			iteration_count:		out	natural range 0 to iterations - 1
+			done:			out	std_logic;
+			iteration_count:	out	natural range 0 to iterations - 1
 		);
 	end component computational_unit;
 
+	component synchronizer is
+		generic (
+			stages: natural := 3;
+		);
+		port (
+			-- Input ports
+			clock:		in	std_logic;
+			reset:		in	std_logic;
+			data_in:	in	std_logic;
+			-- Output ports
+			data_out:	out	std_logic
+		);
+	end component synchronizer;
 end package project_pkg;

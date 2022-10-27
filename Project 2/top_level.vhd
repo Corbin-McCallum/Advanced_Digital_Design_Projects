@@ -23,7 +23,7 @@ begin
 		port map (
 			-- Input ports
 			FPGA_clock 		=> clock;
-			reset 			=> reset
+			reset 			=> reset;
 			-- Output ports
 			point			=> point;
 			point_valid		=> point_valid;
@@ -59,5 +59,15 @@ begin
 			-- Output ports
 			done			=> done;
 			iteration_count		=> iteration_count
+		);.
+	sync:synchronizer
+		generic map(
+			stages			=> stages
+		);
+		port (
+			clock			=> clock;
+			reset			=> reset;
+			data_in			=> data_in;
+			data_out		=> data_out
 		);
 end architecture arch1;

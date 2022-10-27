@@ -63,4 +63,4 @@ begin
 				
 			end case;
 	end process transition_function;
-end architecture logic;
+end architecture logic; 

@@ -36,4 +36,20 @@ package project_pkg is
 		);
 	end component control_unit;
 	
+	component computational_unit is
+		generic(
+			iterations: positive range 1 to 64:= 32;
+			threshold:	ads_sfixed := to_ads_sfixed(4);
+		);
+		port (
+			-- Input ports
+			fpga_clock: 			in 	std_logic;
+			reset:				in		std_logic;
+			seed:				in		ads_complex; --complex #C
+			-- Output ports
+			done:				out	std_logic;
+			iteration_count:		out	natural range 0 to iterations - 1;
+		);
+	end component computational_unit;
+
 end package project_pkg;

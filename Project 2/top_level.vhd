@@ -19,16 +19,16 @@ architecture arch1 of top_level is
 
 begin
 	
-	signal_driver: vga_fsm
+	signal_driver:vga_fsm
 		port map (
 			-- Input ports
 			FPGA_clock 		=> clock;
 			reset 			=> reset
 			-- Output ports
-			point			=> ;
-			point_valid		=> ;
-			h_sync			=> ;
-			v_sync			=>
+			point			=> point;
+			point_valid		=> point_valid;
+			h_sync			=> h_sync;
+			v_sync			=> v_sync
 		);
 
 	control:control_unit

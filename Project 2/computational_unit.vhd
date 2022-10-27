@@ -4,7 +4,7 @@ use ieee.std_logic_1164.all;
 entity computational_unit is
 	generic(
 		iterations: positive range 1 to 64:= 32;
-		threshold:	ads_sfixed := to_ads_sfixed(4);
+		threshold:	ads_sfixed := to_ads_sfixed(4)
 	);
 	port (
 		-- Input ports
@@ -13,7 +13,7 @@ entity computational_unit is
 		seed:				in		ads_complex; --complex #C
 		-- Output ports
 		done:				out	std_logic;
-		iteration_count:		out	natural range 0 to iterations - 1;
+		iteration_count:		out	natural range 0 to iterations - 1
 	);
 end entity computational_unit;
 
@@ -28,7 +28,7 @@ begin
 	-- Obtaining a colored point on the Mandelbrot set
 	compute_point: process(reset, fpga_clock) is
 	begin
-		if reset = '0';
+		if reset = '0' then
 			z <= ( re => (others => '0'), im => (others => '0') );
 			iteration <= 0;
 			all_done <= '0';

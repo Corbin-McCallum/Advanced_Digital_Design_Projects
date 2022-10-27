@@ -46,5 +46,18 @@ begin
 			reset			=> reset;
 			wren			=> wren
 		);
-
+	mandalbrot_engine:computational_unit
+		generic map(
+			iterations		=> iterations;
+			threshold		=> threshold
+		);
+		port map(
+			-- Input ports
+			fpga_clock		=> clock;
+			reset			=> reset;
+			seed			=> seed; --complex #C
+			-- Output ports
+			done			=> done;
+			iteration_count		=> iteration_count
+		);
 end architecture arch1;

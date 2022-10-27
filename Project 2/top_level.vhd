@@ -22,20 +22,20 @@ entity top_level is
 end entity top_level;
 
 architecture arch1 of top_level is
-	constant threshold: ads_sfixed := to_ads_sfixed(4);
-	constant iterations: positive range 1 to 64:= 32;
-	constant stages: natural := 3;
-	signal clock_signal: std_logic;
-	signal reset_signal: std_logic;
-	signal wren_signal: std_logic;
-	signal seed_signal: ads_complex;
-	signal iteration_count_signal_1: natural range 0 to iterations - 1;
-	signal iteration_count_signal_2: std_logic;
-	signal done_signal: std_logic;
-	signal point_signal:	std_logic;
-	signal point_valid_signal:	boolean;
-	signal v_sync_signal:	std_logic;
-	signal h_sync_signal:	std_logic;
+	constant threshold: 			ads_sfixed := to_ads_sfixed(4);
+	constant iterations: 			positive range 1 to 64:= 32;
+	constant stages:			natural := 3;
+	signal clock_signal: 			std_logic;
+	signal reset_signal: 			std_logic;
+	signal wren_signal: 			std_logic;
+	signal seed_signal: 			ads_complex;
+	signal iteration_count_signal_1: 	natural range 0 to iterations - 1;
+	signal iteration_count_signal_2:	std_logic;
+	signal done_signal: 			std_logic;
+	signal point_signal:			std_logic;
+	signal point_valid_signal:		boolean;
+	signal v_sync_signal:			std_logic;
+	signal h_sync_signal:			std_logic;
 begin
 	
 	signal_driver:vga_fsm

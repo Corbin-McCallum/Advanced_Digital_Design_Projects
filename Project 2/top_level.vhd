@@ -34,17 +34,17 @@ begin
 	control:control_unit
 	generic map(
 		threshold 		=> threshold;
-		lines			=> ;
-		pixels 			=>
+		lines			=> lines;
+		pixels 			=> pixels
 	);
 	port map(
 		-- Input ports
-		done			=> ;
-		iteration_count		=> ;
+		done			=> done;
+		iteration_count		=> iteration_count;
 		-- Output ports
-		FPGA_clock		=> ;
-		reset			=> ;
-		wren			=>
+		FPGA_clock		=> clock;
+		reset			=> reset;
+		wren			=> wren
 	);
 
 end architecture arch1;

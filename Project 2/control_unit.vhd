@@ -4,7 +4,7 @@ use ieee.std_logic_1164.all;
 entity control_unit is
 	generic(
 		threshold:	ads_sfixed := to_ads_sfixed(4);
-		lines:	natural range 0 to 479;
+		lines:		natural range 0 to 479;
 		pixels: 	natural range 0 to 479
 	);
 	port (
@@ -15,15 +15,14 @@ entity control_unit is
 		-- Output ports
 		FPGA_clock:		out	std_logic;
 		reset:			out	std_logic;
-		wren:			out 	std_logic;
+		wren:			out 	std_logic
 	);
 end entity control_unit;
 
 architecture logic of control_unit is
-
+	-- Type and signal decleration used for the control_unit
 	type state_type is (reset_state, generate_next_seed, enable, store_result, done_state);
 	signal state, next_state: state_type := reset;
-	
 	signal current_point: coordinate;
 	signal seed: ads_complex;
 begin

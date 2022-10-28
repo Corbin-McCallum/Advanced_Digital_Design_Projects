@@ -10,11 +10,13 @@ entity vga_fsm is
 	);
 	port (
 		-- Input ports
-		FPGA_clock:		in	std_logic;
+		c0:				in	std_logic; --clock input from pll
 		reset:			in	std_logic;
+		--input from control_unit to vga_fsm
+		
 		-- Output ports
 		point:			out	coordinate;
-		point_valid:		out	boolean;
+		point_valid:	out	boolean;
 		h_sync:			out	std_logic;
 		v_sync:			out 	std_logic
 	);
@@ -24,9 +26,9 @@ architecture fsm of vga_fsm is
 	signal current_point: coordinate;
 begin
 	-- Process of handling resets and/or getting next corrdinate 
-	count_pixel: process(FPGA_clock, vga_res) is
+	count_pixel: process(c0) is
 	begin
-		if rising_edge(FPGA_clock) then
+		if rising_edge(c0) then
 			if reset = '0' then
 				current_point <= make_coordinate(0,0);
 			else
@@ -36,18 +38,21 @@ begin
 	end process count_pixel;
 	
 	-- Process to sync vga horizontal and vertical signals
-	sync_point: process(FPGA_clock,current_point, vga_res) is
+	sync_point: process(c0) is
 	begin
 	
-		if rising_edge(FPGA_clock) then 
+		if rising_edge(c0) then 
 			h_sync <= do_horizontal_sync(current_point, vga_res);
 			v_sync <= do_vertical_sync(current_point, vga_res);
 		end if;
 	end process sync_point;
 	
 	-- Process to set point valid true or flase
-	check_point: process(current_point, vga_res) is
+	check_point: process(c0) is
 	begin
-		point_valid <= point_visible(current_point, vga_res);
+		if rising_edge(c0) then
+			point <= current_point;
+			point_valid <= point_visible(current_point, vga_res);
+		end if;
 	end process check_point;
 end architecture fsm;

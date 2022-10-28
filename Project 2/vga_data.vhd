@@ -5,7 +5,7 @@ package vga_data is
 
 	type timing_data is record
 		active:			natural;
-		front_porch:		natural;
+		front_porch:	natural;
 		sync_width:		natural;
 		back_porch:		natural;
 	end record timing_data;
@@ -15,7 +15,7 @@ package vga_data is
 	type vga_timing is record
 		horizontal:		timing_data;
 		vertical:		timing_data;
-		sync_polarity:		polarity;
+		sync_polarity:	polarity;
 	end record vga_timing;
 
 	type coordinate is record
@@ -80,9 +80,9 @@ package vga_data is
 		);
 
 	constant vga_res_1920x1080:	vga_timing := vga_res_data(0);
-	constant vga_res_640x480:	vga_timing := vga_res_data(1);
-	constant vga_res_800x600:	vga_timing := vga_res_data(2);	-- TODO: initialize- initialized
-	constant vga_res_default:	vga_timing := vga_res_data(3);	-- TODO: initialize to your
+	constant vga_res_640x480:		vga_timing := vga_res_data(1);
+	constant vga_res_800x600:		vga_timing := vga_res_data(2);	-- TODO: initialize- initialized
+	constant vga_res_default:		vga_timing := vga_res_data(3);	-- TODO: initialize to your
 												-- target resolution- initialized
 
 	---- TODO: some functions need to be implemented
@@ -236,7 +236,7 @@ package body vga_data is
 		
 		if ret.x = timing_range(vga_res, horizontal) then
 			ret.x := 0;
-			ret.y := point.y + 1;
+			ret.y := ret.y + 1;
 		end if;
 		
 		if ret.y = timing_range(vga_res, vertical) then

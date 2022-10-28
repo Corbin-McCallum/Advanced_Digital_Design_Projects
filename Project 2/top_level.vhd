@@ -17,8 +17,13 @@ entity top_level is
 	);
 	port (
 		reset:		in	std_logic;
-		clock:		in	std_logic
-	);
+		clock:		in	std_logic;
+		h_sync:		out std_logic;
+		v_sync:		out std_logic;
+		red:			out natural range 0 to 15;
+		blue:			out natural range 0 to 15;
+		green:  		out natural range 0 to 15
+		);
 end entity top_level;
 
 architecture arch1 of top_level is
@@ -36,12 +41,33 @@ architecture arch1 of top_level is
 	signal point_valid_signal:		boolean;
 	signal v_sync_signal:			std_logic;
 	signal h_sync_signal:			std_logic;
-begin
 	
+	component pll
+		PORT
+		(
+			inclk0		: IN STD_LOGIC  := '0';
+			c0		: OUT STD_LOGIC 
+		);
+	end component;
+	
+begin
+	pll0: pll
+		port map(
+			--input port
+			inclk0	=> clock,
+			--output port
+			c0 		=> clock_signal
+		);
+		
+	ram0: ram
+		port map(
+			
+		);
+		
 	signal_driver:vga_fsm
 		port map (
 			-- Input ports
-			FPGA_clock 		=> clock_signal,
+			c0 		=> clock_signal,
 			reset 			=> reset_signal,
 			-- Output ports
 			point			=> point_signal,
@@ -61,7 +87,7 @@ begin
 			done			=> done_signal,
 			iteration_count		=> iteration_count_signal_2,
 			-- Output ports
-			FPGA_clock		=> clock_signal,
+			c0				=> clock_signal,
 			reset			=> reset_signal,
 			wren			=> wren_signal
 		);

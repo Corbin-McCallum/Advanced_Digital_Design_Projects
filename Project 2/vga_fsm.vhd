@@ -10,13 +10,13 @@ entity vga_fsm is
 	);
 	port (
 		-- Input ports
-		c0:				in	std_logic; --clock input from pll
+		c0:			in	std_logic; --clock input from pll
 		reset:			in	std_logic;
 		--input from control_unit to vga_fsm
 		
 		-- Output ports
 		point:			out	coordinate;
-		point_valid:	out	boolean;
+		point_valid:		out	boolean;
 		h_sync:			out	std_logic;
 		v_sync:			out 	std_logic
 	);

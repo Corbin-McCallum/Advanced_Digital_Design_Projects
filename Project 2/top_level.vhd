@@ -61,7 +61,14 @@ begin
 		
 	ram0: ram
 		port map(
-			
+			--input signals
+			clock		=> clock_signal,
+			wren		=> wren_signal,
+			addr_a		=> addr_a_data,
+			data_in_a 	=> data_in,
+			--output signals
+			addr_b		=> addr_b_data,
+			data_out_b	=> data_out
 		);
 		
 	signal_driver:vga_fsm
@@ -87,7 +94,7 @@ begin
 			done			=> done_signal,
 			iteration_count		=> iteration_count_signal_2,
 			-- Output ports
-			c0				=> clock_signal,
+			c0			=> clock_signal,
 			reset			=> reset_signal,
 			wren			=> wren_signal
 		);

@@ -124,8 +124,4 @@ package body ads_complex_pkg is
 		ret.im := (l.im*l.re) + (l.im*l.re);
 		return ret;
 	end function ads_square;
-	
-	
-
 end package body ads_complex_pkg;
-

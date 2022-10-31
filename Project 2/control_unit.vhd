@@ -76,7 +76,7 @@ begin
 				end if;
 
 				if state = generate_next_seed then
-					if current_point < 479 then
+					if current_point.x < 479 then
 						current_point.x <= current_point.x + 1;
 					else
 						current_point.x <= 0;

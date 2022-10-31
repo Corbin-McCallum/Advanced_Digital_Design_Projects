@@ -82,6 +82,7 @@ begin
 						current_point.x <= 0;
 						current_point.y <= current_point.y + 1;
 					end if;
+						seed <= ads_cmplx((current_point.x/120)-2, (-1)*(current_point.y/120)+2);
 				else
 					current_point <= current_point;
 				end if;

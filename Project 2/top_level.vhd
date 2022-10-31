@@ -54,21 +54,21 @@ begin
 	pll0: pll
 		port map(
 			--input port
-			inclk0	=> clock,
+			inclk0			=> clock,
 			--output port
-			c0 		=> clock_signal
+			c0 			=> clock_signal
 		);
 		
 	ram0: ram
 		port map(
 			--input signals
-			clock		=> clock_signal,
-			wren		=> wren_signal,
-			addr_a		=> addr_a_data,
-			data_in_a 	=> data_in,
+			clock			=> clock_signal,
+			wren			=> wren_signal,
+			addr_a			=> addr_a_data,
+			data_in_a 		=> data_in,
 			--output signals
-			addr_b		=> addr_b_data,
-			data_out_b	=> data_out
+			addr_b			=> addr_b_data,
+			data_out_b		=> data_out
 		);
 		
 	signal_driver:vga_fsm

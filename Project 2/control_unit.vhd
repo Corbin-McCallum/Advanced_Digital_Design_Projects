@@ -83,7 +83,7 @@ begin
 						current_point.y <= current_point.y + 1;
 					end if;
 				else
-					current_poimt <= current_point;
+					current_point <= current_point;
 				end if;
 
 				if state = enable then

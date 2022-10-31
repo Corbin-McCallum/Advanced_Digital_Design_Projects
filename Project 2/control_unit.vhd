@@ -33,12 +33,7 @@ begin
 				when reset_state => 
 						next_state <= generate_next_seed;
 				when generate_next_seed => 
-					--check the seed limit first
-					if (current_point = '0') then --haven't reached the seed limit
 						next_state <= enable;
-					else 
-						next_state <= store_result;
-					end if;
 				when enable => 
 					--check if computational unit is all done with iterations
 					if computation_done = '1' then
@@ -48,7 +43,7 @@ begin
 					end if;
 				when store_result =>
 					--if at the seed limit, set wren to 1 for ram to start storing computational data
-					if (current_point = '1') then
+					if (current_point.x = '479' and current_point.y = '479') then
 						next_state <= done_state;
 					else --the seed limit hasn't been reached, next state is reset.
 						next_state <= reset_state;
@@ -60,16 +55,29 @@ begin
 	
 	output_process: process(state) is
 		begin
-			case state is
-				when reset_state => 
-						reset <= '0';					
-				when generate_next_seed => 
+			if state = reset_state then
+				reset <= '0';
+			else
+				reset <= '1';
+			end if;
+			
+			if state = generate_next_seed then
 					
-				when enable => 
-					
-				when store_result =>
+			else
 				
-			end case;
+			end if;
+			
+			if state = enable then
+			
+			else
+					
+			end if;
+			
+			if state = store_result then
+			
+			else
+				
+			end if;
 			
 	end process output_process;
 end architecture logic; 

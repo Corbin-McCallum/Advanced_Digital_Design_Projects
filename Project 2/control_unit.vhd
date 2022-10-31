@@ -8,8 +8,8 @@ entity control_unit is
 	);
 	port (
 		-- Input ports
-		reset:			in		std_logic;
-		FPGA_clock:		in		std_logic;
+		reset:			in	std_logic;
+		FPGA_clock:		in	std_logic;
 		-- Output ports
 		address:		out 	natural;
 		iterations:		out 	natural;
@@ -41,7 +41,7 @@ begin
 					end if;
 				when enable => 
 					--check if computational unit is all done with iterations
-					if computation_done = '1'then
+					if computation_done = '1' then
 						next_state <= store_result;
 					else
 						next_state <= enable;

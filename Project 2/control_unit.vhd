@@ -3,18 +3,18 @@ use ieee.std_logic_1164.all;
 
 entity control_unit is
 	generic(
-		threshold:	ads_sfixed := to_ads_sfixed(4);
-		total_iterations = natural := 32 
+		threshold:		ads_sfixed := to_ads_sfixed(4);
+		total_iterations:	natural := 32 
 	);
 	port (
 		-- Input ports
-		reset:					in		std_logic;
-		FPGA_clock:				in		std_logic;
+		reset:			in		std_logic;
+		FPGA_clock:		in		std_logic;
 		-- Output ports
-		address:					out 	natural;
-		iterations:				out 	natural;
-		done:		 				out 	std_logic;
-		wren:						out 	std_logic
+		address:		out 	natural;
+		iterations:		out 	natural;
+		done:		 	out 	std_logic;
+		wren:			out 	std_logic
 	);
 end entity control_unit;
 

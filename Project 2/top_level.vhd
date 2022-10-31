@@ -18,11 +18,11 @@ entity top_level is
 	port (
 		reset:		in	std_logic;
 		clock:		in	std_logic;
-		h_sync:		out std_logic;
-		v_sync:		out std_logic;
-		red:			out natural range 0 to 15;
-		blue:			out natural range 0 to 15;
-		green:  		out natural range 0 to 15
+		h_sync:		out 	std_logic;
+		v_sync:		out 	std_logic;
+		red:		out 	natural range 0 to 15;
+		blue:		out 	natural range 0 to 15;
+		green:  	out 	natural range 0 to 15
 		);
 end entity top_level;
 
@@ -67,7 +67,7 @@ begin
 	signal_driver:vga_fsm
 		port map (
 			-- Input ports
-			c0 		=> clock_signal,
+			c0 			=> clock_signal,
 			reset 			=> reset_signal,
 			-- Output ports
 			point			=> point_signal,

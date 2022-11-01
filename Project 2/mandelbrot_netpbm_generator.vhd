@@ -29,7 +29,7 @@ architecture test_fixture of mandelbrot_netpbm_generator is
 			done:						out	std_logic;
 			iteration_count:		out	natural range 0 to iterations - 1
 		);
-	end entity computational_unit;
+	end component computational_unit;
 
 
 	signal iteration_test: natural range 0 to iterations + 1;

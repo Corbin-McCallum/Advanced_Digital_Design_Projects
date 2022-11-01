@@ -29,7 +29,7 @@ architecture test_fixture of mandelbrot_netpbm_generator is
 			done:						out	std_logic;
 			iteration_count:		out	natural range 0 to iterations - 1
 		);
-	end component computational_unit;
+	end entity computational_unit;
 
 
 	signal iteration_test: natural range 0 to iterations + 1;
@@ -92,13 +92,13 @@ begin
 		-- enable the generator
 		enable <= '1';
 
-		for i in 0 to iterations - 1 loop
+		while done = '0' loop
 			wait until rising_edge(clock);
-			write(output_line, integer'image(iterations - 1 - iteration_count));
-			writeline(output, output_line);
-			flush(output);
+			if wren = '1' then
+				writeline(output_line, integer'image(iterations - iteration_count - 1));
+				write(output, output_line);
 		end loop;
-
+		
 		-- all done
 		finished <= true;
 		wait;

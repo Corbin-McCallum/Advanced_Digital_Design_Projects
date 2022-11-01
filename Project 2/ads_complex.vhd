@@ -90,13 +90,13 @@ package body ads_complex_pkg is
 	
 	-- complex conjugate implementation
 		function conj(
-			arg:in ads_complex
+			arg: in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
 	begin
-		ret.re := l.re;
-		ret.im := -l.im;
+		ret.re := arg.re;
+		ret.im := -arg.im;
 		return ret;
 	end function conj;
 	
@@ -107,13 +107,15 @@ package body ads_complex_pkg is
 	is
 		variable ret: ads_fixed;
 	begin
-		ret:= (l.re*l.re) + (l.im*l.im);
+		ret:= (arg.re*arg.re) + (arg.im*arg.im);
 		return ret;
 	end function abs2;
 	
+	
+	
 	--square complex implementation	
 	function ads_square(
-			l: ads_complex
+			l: in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
@@ -122,4 +124,7 @@ package body ads_complex_pkg is
 		ret.im := (l.im*l.re) + (l.im*l.re);
 		return ret;
 	end function ads_square;
+	
+	
+
 end package body ads_complex_pkg;

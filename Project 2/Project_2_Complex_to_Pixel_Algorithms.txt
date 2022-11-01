@@ -1,0 +1,15 @@
+Project 2 - Algorithms to convert complex numbers to pixels and vice versa.
+
+1. Given the pixel ( X , Y ), compute the complex number 'c'.
+
+c.re = ( X / 120 ) - 2
+
+c.im = ((- 1) * ( Y / 120 )) + 2
+
+-------------------------
+
+2. Given the complex number 'c', compute the pixel ( X , Y ).
+
+X = ( c.re * 120 ) + 240
+
+Y = ((- 1) * ( c.im * 120 )) + 240

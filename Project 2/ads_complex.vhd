@@ -53,7 +53,7 @@ package body ads_complex_pkg is
 
 	-- function implementations
 	function "+" (
-			l, r: ads_complex
+			l, r: in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
@@ -66,7 +66,7 @@ package body ads_complex_pkg is
 	-- implement all other functions here
 	-- subtraction implementation 
 	function "-"(
-			l, r: ads_complex
+			l, r: in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
@@ -78,7 +78,7 @@ package body ads_complex_pkg is
 	
 	-- multiplication implementation
 	function "*"(
-			l, r: ads_complex
+			l, r: in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
@@ -90,7 +90,7 @@ package body ads_complex_pkg is
 	
 	-- complex conjugate implementation
 		function conj(
-			l: ads_complex
+			arg:in ads_complex
 		) return ads_complex
 	is
 		variable ret: ads_complex;
@@ -102,7 +102,7 @@ package body ads_complex_pkg is
 	
 	--square magnitude complex  implementation	
 	function abs2(
-			l: ads_complex
+			arg: in ads_complex
 		) return ads_fixed
 	is
 		variable ret: ads_fixed;
@@ -110,8 +110,6 @@ package body ads_complex_pkg is
 		ret:= (l.re*l.re) + (l.im*l.im);
 		return ret;
 	end function abs2;
-	
-	
 	
 	--square complex implementation	
 	function ads_square(

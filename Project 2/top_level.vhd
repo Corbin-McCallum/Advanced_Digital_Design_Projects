@@ -1,8 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-
-library work;
-use work.project_pkg.all;
+use ieee.numeric_std.all;
 
 library vga;
 use vga.vga_data.all;
@@ -12,14 +10,16 @@ use ads.ads_fixed.all;
 
 entity top_level is
 	generic(
-		lines:		natural range 0 to 479;
-		pixels: 	natural range 0 to 639
+		vga_res: vga_timing := vga_res_default;
+		iterations: natural := 32;
+		threshold: ads_sfixed := to_ads_sfixed(4)
 	);
 	port (
-		reset:		in	std_logic;
-		clock:		in	std_logic;
-		h_sync:		out 	std_logic;
-		v_sync:		out 	std_logic;
+		reset:	in		std_logic;
+		clock:	in		std_logic;
+		
+		h_sync:	out 	std_logic;
+		v_sync:	out 	std_logic;
 		red:		out 	natural range 0 to 15;
 		blue:		out 	natural range 0 to 15;
 		green:  	out 	natural range 0 to 15
@@ -27,101 +27,149 @@ entity top_level is
 end entity top_level;
 
 architecture arch1 of top_level is
-	constant threshold: 			ads_sfixed := to_ads_sfixed(4);
-	constant iterations: 			positive range 1 to 64:= 32;
-	constant stages:			natural := 3;
-	signal clock_signal: 			std_logic;
-	signal reset_signal: 			std_logic;
-	signal wren_signal: 			std_logic;
-	signal seed_signal: 			ads_complex;
-	signal iteration_count_signal_1: 	natural range 0 to iterations - 1;
-	signal iteration_count_signal_2:	std_logic;
-	signal done_signal: 			std_logic;
-	signal point_signal:			std_logic;
-	signal point_valid_signal:		boolean;
-	signal v_sync_signal:			std_logic;
-	signal h_sync_signal:			std_logic;
+	signal clock_signal: 	std_logic;
+	signal wren_signal: 		std_logic;
+
+	signal point_signal:			coordinate;
+	signal point_valid_signal:	boolean;
+	
+	signal write_address, read_address: natural;
+	
+	signal iteration_count:	natural range 0 to iterations - 1;
+	signal iteration_read: std_logic_vector(4 downto 0);
+
 	
 	component pll
 		PORT
 		(
-			inclk0		: IN STD_LOGIC  := '0';
-			c0		: OUT STD_LOGIC 
+			inclk0: 		IN STD_LOGIC  := '0';
+			c0		: 		OUT STD_LOGIC 
+		);
+	end component;
+	
+	component control_unit
+		generic (
+			threshold:		ads_sfixed := to_ads_sfixed(4);
+			total_iterations:	natural := 32 
+		);
+		PORT
+		(
+			-- Input ports
+			reset:		in		std_logic;
+			fpga_clock:	in		std_logic;
+			-- Output ports
+			address:		out 	natural;
+			iterations:	out 	natural;
+			done:		 	out 	std_logic;
+			wren:			out 	std_logic
+		);
+	end component;
+	
+	component vga_fsm
+		generic (
+			vga_res:	vga_timing := vga_res_default
+
+		);
+		PORT
+		(
+			-- Input ports
+			c0:				in	std_logic; --clock input from pll
+			reset:			in	std_logic;
+			--input from control_unit to vga_fsm
+		
+			-- Output ports
+			point:			out	coordinate;
+			point_valid:	out	boolean;
+			h_sync:			out	std_logic;
+			v_sync:			out 	std_logic
+		);
+	end component;
+	
+	component ram
+		generic (
+			data_width: positive := 5;
+			addr_Width: positive := 18
+		);
+		PORT
+		(
+			-- global
+			clock:	in std_logic;
+		
+			-- port A (write)
+			addr_a:	in std_logic_vector(addr_Width - 1 downto 0);
+			wren:		in std_logic;
+			data_in_a:	in std_logic_vector(data_width - 1 downto 0);
+		
+			-- port B (Read)
+			addr_b: in std_logic_vector(addr_width - 1 downto 0);
+			data_out_b:	out std_logic_Vector(data_width - 1 downto 0)
 		);
 	end component;
 	
 begin
+	red <= to_integer(unsigned(iteration_read(4 downto 1))) when point_valid_signal
+				else 0;
+	green <= to_integer(unsigned(iteration_read(4 downto 1))) when point_valid_signal
+				else 0;
+	blue <= to_integer(unsigned(iteration_read(4 downto 1))) when point_valid_signal
+				else 0;
+
+	read_address <= point_signal.y * 480 + point_signal.x;
+	
 	pll0: pll
 		port map(
 			--input port
-			inclk0			=> clock,
+			inclk0	=> clock,
 			--output port
-			c0 			=> clock_signal
+			c0 		=> clock_signal
 		);
 		
 	ram0: ram
+		generic map (
+			data_width => 5,
+			addr_width => 18
+		)
 		port map(
 			--input signals
 			clock			=> clock_signal,
 			wren			=> wren_signal,
-			addr_a			=> addr_a_data,
-			data_in_a 		=> data_in,
+			addr_a		=> std_logic_vector(to_unsigned(write_address, 18)),
+			data_in_a 	=> std_logic_vector(to_unsigned(iteration_count, 5)),
 			--output signals
-			addr_b			=> addr_b_data,
-			data_out_b		=> data_out
+			addr_b		=> std_logic_vector(to_unsigned(read_address, 18)),
+			data_out_b	=> iteration_read
 		);
 		
 	signal_driver:vga_fsm
+		generic map (
+			vga_res		=> vga_res_default
+		)
 		port map (
 			-- Input ports
-			c0 			=> clock_signal,
-			reset 			=> reset_signal,
+			c0 				=> clock_signal,
+			reset 			=> reset,
 			-- Output ports
-			point			=> point_signal,
+			point				=> point_signal,
 			point_valid		=> point_valid_signal,
-			h_sync			=> h_sync_signal,
-			v_sync			=> v_sync_signal
+			h_sync			=> h_sync,
+			v_sync			=> v_sync
 		);
 
 	control:control_unit
 		generic map(
-			threshold 		=> threshold,
-			lines			=> lines,
-			pixels 			=> pixels
+			threshold			=> threshold,
+			total_iterations	=> iterations
 		)		
 		port map(
-			-- Input ports
-			done			=> done_signal,
-			iteration_count		=> iteration_count_signal_2,
+			reset					=> reset,
+			fpga_clock			=> clock_signal,
 			-- Output ports
-			c0			=> clock_signal,
-			reset			=> reset_signal,
-			wren			=> wren_signal
+			address				=> write_address,
+			iterations			=> iteration_count,
+			done		 			=> open,
+			wren					=> wren_signal
 		);
 		
-	mandalbrot_engine:computational_unit
-		generic map(
-			iterations		=> iterations,
-			threshold		=> threshold
-		)
-		port map(
-			-- Input ports
-			fpga_clock		=> clock_signal,
-			reset			=> reset_signal,
-			seed			=> seed_signal, --complex #C
-			-- Output ports
-			done			=> done_signal,
-			iteration_count		=> iteration_count_signal_1
-		);
 		
-	sync:synchronizer
-		generic map(
-			stages			=> stages
-		)
-		port map(
-			clock			=> clock_signal,
-			reset			=> reset_signal,
-			data_in			=> point_signal,
-			data_out		=> data_out
-		);
+
 end architecture arch1;

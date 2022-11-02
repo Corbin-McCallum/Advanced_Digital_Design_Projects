@@ -15,21 +15,22 @@ end entity mandelbrot_netpbm_generator;
 architecture test_fixture of mandelbrot_netpbm_generator is
 
 	-- your mandelbrot computational engine here
-	component computational_unit is
+	component control_unit is
 		generic(
-			iterations: positive range 1 to 64:= 32;
-			threshold:	ads_sfixed := to_ads_sfixed(4)
+			threshold:		ads_sfixed := to_ads_sfixed(4);
+			total_iterations:	natural := 32 
 		);
 		port (
 			-- Input ports
-			fpga_clock: 			in 	std_logic;
-			reset:					in		std_logic;
-			seed:						in		ads_complex; --complex #C
+			reset:		in	std_logic;
+			fpga_clock:	in	std_logic;
 			-- Output ports
-			done:						out	std_logic;
-			iteration_count:		out	natural range 0 to iterations - 1
+			address:	out 	natural;
+			iterations:	out 	natural;
+			done:		out 	std_logic;
+			wren:		out 	std_logic
 		);
-	end entity computational_unit;
+	end component control_unit;
 
 
 	signal iteration_test: natural range 0 to iterations + 1;
@@ -39,8 +40,9 @@ architecture test_fixture of mandelbrot_netpbm_generator is
 	signal reset: std_logic		:= '0';
 	signal enable: std_logic	:= '0';
 
-	signal iteration_count: natural range 0 to iterations;
-	signal output_valid: boolean;
+	signal done: std_logic;
+	signal iteration_count: natural;
+	signal wren: std_logic;
 
 	signal finished: boolean	:= false;
 
@@ -48,17 +50,18 @@ begin
 
 	clock <= not clock after 1 ps when not finished else '0';
 
-	generator:computational_unit
+	generator:control_unit
 		generic map (
-			iterations 			=> iterations,
-			threshold			=> threshold
+			total_iterations 	=> iterations,
+			threshold		=> escape
 		)
 		port map (
-			fpga_clock			=> clock,
-			reset 				=> reset,
-			seed 					=> seed,
-			done					=> done,
-			iteration_count 	=> iteration_count
+			fpga_clock		=> clock,
+			reset 			=> reset,
+			address			=> open,
+			done			=> done,
+			iterations		=> iteration_count,
+			wren			=> wren
 		);
 	
 	make_pgm: process
@@ -71,8 +74,7 @@ begin
 		write(output_line, string'("P2"));
 		writeline(output, output_line);
 		---- resolution
-		write(output_line, integer'image(x_steps) & string'(" ")
-				& integer'image(y_steps));
+		write(output_line, string'("480 480"));
 		writeline(output, output_line);
 		---- maximum value
 		write(output_line, integer'image(iterations - 1));
@@ -80,23 +82,19 @@ begin
 
 		-- from here onwards, stimulus depends on your implementation
 
-		-- ensure generator is disabled
-		enable <= '0';
-
 		-- reset generator
 		wait until rising_edge(clock);
-		reset <= '1';
-		wait until rising_edge(clock);
 		reset <= '0';
+		wait until rising_edge(clock);
+		reset <= '1';
 
-		-- enable the generator
-		enable <= '1';
-
+		
 		while done = '0' loop
 			wait until rising_edge(clock);
 			if wren = '1' then
-				writeline(output_line, integer'image(iterations - iteration_count - 1));
-				write(output, output_line);
+				write(output_line, integer'image(iterations - iteration_count - 1));
+				writeline(output, output_line);
+			end if;
 		end loop;
 		
 		-- all done

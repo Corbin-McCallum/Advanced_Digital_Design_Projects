@@ -9,16 +9,16 @@ entity ram is
 	);
 	port (
 		-- global
-		clock:	std_logic;
+		clock:	in std_logic;
 		
 		-- port A (write)
-		addr_a:	std_logic_vector(addr_Width - 1 downto 0);
-		wren:		std_logic;
-		data_in_a:	std_logic_vector(data_width - 1 downto 0);
+		addr_a:	in std_logic_vector(addr_Width - 1 downto 0);
+		wren:		in std_logic;
+		data_in_a:	in std_logic_vector(data_width - 1 downto 0);
 		
 		-- port B (Read)
-		addr_b: std_logic_vector(addr_Width - 1 downto 0);
-		data_out_b:	std_logic_Vector(data_Width - 1 downto 0)
+		addr_b: in std_logic_vector(addr_Width - 1 downto 0);
+		data_out_b:	out std_logic_Vector(data_Width - 1 downto 0)
 	);
 end entity ram;
 
@@ -29,12 +29,20 @@ architecture rtl of ram is
 begin
 	port_a: process(clock) is
 	begin
-		if wren = '1' then
-			storage(to_integer(unsigned(addr_a))) <= data_in_a;
+		if rising_edge(clock) then
+			if wren = '1' then
+				storage(to_integer(unsigned(addr_a))) := data_in_a;
+			end if;
 		end if;
 	end process port_a;
 	
 	-- port b
-	data_out_b <= storage(to_integer(unsigned(addr_b)));
+	port_b: process(clock, addr_b) is
+	begin
+		if rising_edge(clock) then
+			data_out_b <= storage(to_integer(unsigned(addr_b)));
+		end if;
+	end process port_b;
 end architecture rtl;
-		
+
+

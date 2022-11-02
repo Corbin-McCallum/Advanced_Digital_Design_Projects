@@ -6,11 +6,9 @@ entity synchronizer is
 		stages: natural := 3
 	);
 	port (
-		-- Input ports
-		clock:		in	std_logic;
-		reset:		in	std_logic;
+		clock:	in	std_logic;
+		reset:	in	std_logic;
 		data_in:	in	std_logic;
-		-- Output ports
 		data_out:	out	std_logic
 	);
 end entity synchronizer;

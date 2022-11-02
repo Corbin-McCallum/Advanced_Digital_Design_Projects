@@ -42,8 +42,8 @@ begin
 	begin
 	
 		if rising_edge(c0) then 
-			h_sync <= do_horizontal_sync(current_point, vga_res);
-			v_sync <= do_vertical_sync(current_point, vga_res);
+			h_sync 		<= do_horizontal_sync(current_point, vga_res);
+			v_sync 		<= do_vertical_sync(current_point, vga_res);
 		end if;
 	end process sync_point;
 	
@@ -51,8 +51,8 @@ begin
 	check_point: process(c0) is
 	begin
 		if rising_edge(c0) then
-			point <= current_point;
-			point_valid <= point_visible(current_point, vga_res);
+			point 		<= current_point;
+			point_valid 	<= point_visible(current_point, vga_res);
 		end if;
 	end process check_point;
 end architecture fsm;

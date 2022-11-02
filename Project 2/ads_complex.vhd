@@ -37,6 +37,10 @@ package ads_complex_pkg is
 	function conj (
 			arg: in ads_complex
 		) return ads_complex;
+		
+	function ads_square (
+			l: in ads_complex
+		) return ads_complex;
 
 	-- returns || arg || ** 2
 	function abs2 (
@@ -64,6 +68,17 @@ package body ads_complex_pkg is
 	end function "+";
 
 	-- implement all other functions here
+	function ads_cmplx (
+			re, im: in ads_sfixed
+		) return ads_complex
+	is
+		variable ret: ads_complex;
+	begin
+		ret.re := re;
+		ret.im := im;
+		return ret;
+	end function ads_cmplx;
+	
 	-- subtraction implementation 
 	function "-"(
 			l, r: in ads_complex
@@ -103,9 +118,9 @@ package body ads_complex_pkg is
 	--square magnitude complex  implementation	
 	function abs2(
 			arg: in ads_complex
-		) return ads_fixed
+		) return ads_sfixed
 	is
-		variable ret: ads_fixed;
+		variable ret: ads_sfixed;
 	begin
 		ret:= (arg.re*arg.re) + (arg.im*arg.im);
 		return ret;

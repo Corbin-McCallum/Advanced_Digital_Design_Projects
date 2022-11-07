@@ -1,4 +1,0 @@
-v 4
-file . "../vga_data.vhd" "80d6f5ff6c81abf18ca253ae107d05295a82019d" "20221102161515.401":
-  package vga_data at 1( 0) + 0 on 13 body;
-  package body vga_data at 133( 3489) + 0 on 14;

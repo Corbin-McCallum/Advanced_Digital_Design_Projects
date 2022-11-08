@@ -14,34 +14,43 @@ entity computational_unit is
 	port (
 		-- Input ports
 		fpga_clock: 			in 	std_logic;
-		reset:					in		std_logic;
-		enable:					in		std_logic;
-		seed:						in		ads_complex; --complex #C
+		reset:				in	std_logic;
+		enable:				in	std_logic;
+		seed:				in	ads_complex; --complex #C
+		z_in:				in	ads_complex;
 		-- Output ports
-		done:						out	std_logic;
+		done:				out	std_logic;
 		iteration_count:		out	natural range 0 to iterations - 1
 	);
 end entity computational_unit;
 
 architecture computation of computational_unit is
-	signal z: 				ads_complex;
+	signal accumulator:	ads_complex;
 	signal iteration: 	natural range 0 to iterations - 1;
-	signal all_done:		std_logic;
+	signal all_done:	std_logic;
 	
 begin
-	-- Obtaining a colored point on the Mandelbrot set
+	-- Obtaining a colored point on the Julia set
 	compute_point: process(reset, fpga_clock) is
+		variable re_squared, im_squared, re_times_im: ads_sfixed;
 	begin
+		--x^2, y^2, x*y
+		re_squared 	:= accumulator.re * accumulator.re;
+		im_squared 	:= accumulator.im * accumulator.im;
+		re_times_im 	:= accumulator.re * accumulator.im;
+				
 		if reset = '0' then
-			z <= ( re => (others => '0'), im => (others => '0') );
+			accumulator <= z_in;
 			iteration <= 0;
 			all_done <= '0';
 		elsif rising_edge(fpga_clock) then
 			if enable = '1' then
-				if (abs2(z) >= threshold) or (iteration = (iterations - 1)) then
+				if ((re_squared + im_squared) >= threshold) or (iteration = (iterations - 1)) then
 					all_done <= '1';
 				else
-					z <= ads_square(z) + seed;
+					--Replacement for z^2 + c
+					accumulator.re <= (re_squared - im_squared) + seed.re;
+					accumulator.im <= (2 * re_times_im) + seed.im;
 					iteration <= iteration + 1;
 				end if;
 			end if;

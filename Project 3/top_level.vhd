@@ -15,11 +15,11 @@ entity top_level is
 		threshold: ads_sfixed := to_ads_sfixed(4)
 	);
 	port (
-		reset:	in		std_logic;
-		clock:	in		std_logic;
+		reset:		in	std_logic;
+		clock:		in	std_logic;
 		
-		h_sync:	out 	std_logic;
-		v_sync:	out 	std_logic;
+		h_sync:		out 	std_logic;
+		v_sync:		out 	std_logic;
 		red:		out 	natural range 0 to 15;
 		blue:		out 	natural range 0 to 15;
 		green:  	out 	natural range 0 to 15
@@ -42,8 +42,8 @@ architecture arch1 of top_level is
 	component pll
 		PORT
 		(
-			inclk0: 		IN STD_LOGIC  := '0';
-			c0		: 		OUT STD_LOGIC 
+			inclk0		: 	IN STD_LOGIC  := '0';
+			c0		: 	OUT STD_LOGIC 
 		);
 	end component;
 	
@@ -57,11 +57,9 @@ architecture arch1 of top_level is
 			-- Input ports
 			reset:		in		std_logic;
 			fpga_clock:	in		std_logic;
+			c_value:	in		ads_complex;
 			-- Output ports
-			address:		out 	natural;
-			iterations:	out 	natural;
-			done:		 	out 	std_logic;
-			wren:			out 	std_logic
+			iterations:	out 	natural
 		);
 	end component;
 	
@@ -73,13 +71,13 @@ architecture arch1 of top_level is
 		PORT
 		(
 			-- Input ports
-			c0:				in	std_logic; --clock input from pll
+			c0:			in	std_logic; --clock input from pll
 			reset:			in	std_logic;
 			--input from control_unit to vga_fsm
 		
 			-- Output ports
 			point:			out	coordinate;
-			point_valid:	out	boolean;
+			point_valid:		out	boolean;
 			h_sync:			out	std_logic;
 			v_sync:			out 	std_logic
 		);
@@ -119,7 +117,7 @@ begin
 	pll0: pll
 		port map(
 			--input port
-			inclk0	=> clock,
+			inclk0		=> clock,
 			--output port
 			c0 		=> clock_signal
 		);
@@ -131,8 +129,8 @@ begin
 		)
 		port map(
 			--input signals
-			clock			=> clock_signal,
-			wren			=> wren_signal,
+			clock		=> clock_signal,
+			wren		=> wren_signal,
 			addr_a		=> std_logic_vector(to_unsigned(write_address, 18)),
 			data_in_a 	=> std_logic_vector(to_unsigned(iteration_count, 5)),
 			--output signals
@@ -146,10 +144,10 @@ begin
 		)
 		port map (
 			-- Input ports
-			c0 				=> clock_signal,
+			c0 			=> clock_signal,
 			reset 			=> reset,
 			-- Output ports
-			point				=> point_signal,
+			point			=> point_signal,
 			point_valid		=> point_valid_signal,
 			h_sync			=> h_sync,
 			v_sync			=> v_sync
@@ -157,17 +155,15 @@ begin
 
 	control:control_unit
 		generic map(
-			threshold			=> threshold,
+			threshold		=> threshold,
 			total_iterations	=> iterations
 		)		
 		port map(
-			reset					=> reset,
+			reset				=> reset,
 			fpga_clock			=> clock_signal,
+			c_value				=> ( re => to_ads_sfixed(-0.3), im => to_ads_sfixed(0.6) ),
 			-- Output ports
-			address				=> write_address,
-			iterations			=> iteration_count,
-			done		 			=> open,
-			wren					=> wren_signal
+			iterations			=> iteration_count
 		);
 		
 		

@@ -20,9 +20,7 @@ entity control_unit is
 		fpga_clock:	in	std_logic;
 		-- Output ports
 		address:	out 	natural;
-		iterations:	out 	natural;
-		done:		out 	std_logic;
-		wren:		out 	std_logic
+		iterations:	out 	natural
 	);
 end entity control_unit;
 
@@ -69,104 +67,19 @@ begin
 			);
 	address <= 480 * current_point.y + current_point.x;
 
-	cu0: computational_unit
-		generic map (
-			iterations 	=> total_iterations,
-			threshold	=> threshold
-		)
-		port map (
-			fpga_clock 	=> fpga_clock,
-			reset 		=> computation_reset,
-			enable 		=> computation_enable,
-			seed 		=> seed,
-			done		=> computation_done,
-			iteration_count => iterations
-		);
-
-	transition_function: process(state, current_point, computation_done) is
-		begin
-			case state is
-				when reset_state => 
-						next_state <= generate_next_seed;
-				when generate_next_seed => 
-						next_state <= enable;
-				when enable => 
-					--check if computational unit is all done with iterations
-					if computation_done = '1' then
-						next_state <= store_result;
-					else
-						next_state <= enable;
-					end if;
-				when store_result =>
-					--if at the seed limit, set wren to 1 for ram to start storing computational data
-					if (current_point.x = 479 and current_point.y = 479) then
-						next_state <= done_state;
-					else --the seed limit hasn't been reached, next state is reset.
-						next_state <= reset_state;
-					end if;
-				when done_state => 
-						next_state <= done_state;
-			end case;
-	end process transition_function;
-	
-	save_state: process(fpga_clock) is
-		begin
-			-- check for edge of clock, add reset logic
-			if rising_edge(fpga_clock) then
-				if reset = '0' then
-					state <= reset_state;
-				else
-					state <= next_state;
-				end if;
-			end if;
-	end process save_state;
-				
-	output_process: process(fpga_clock, reset) is
-		begin -- add reset logic
-			if reset = '0' then
-				computation_reset <= '1';
-				current_point <= ( x=> 0, y => 0 );
-				computation_enable <= '0';
-				wren <= '0';
-				done <= '0';				
-			elsif rising_edge(fpga_clock) then
-				if state = reset_state then
-					computation_reset <= '0';
-				else
-					computation_reset <= '1';
-				end if;
-
-				if state = generate_next_seed then
-					if current_point.x < 479 then
-						current_point.x <= current_point.x + 1;
-					else
-						current_point.x <= 0;
-						current_point.y <= current_point.y + 1;
-					end if;
-				else
-					current_point <= current_point;
-				end if;
-				
-				
-				if state = enable then
-					computation_enable <= '1';
-				else
-					computation_enable <= '0';
-				end if;
-
-				if state = store_result then
-					wren <= '1';
-				else
-					wren <= '0';
-				end if;
-				
-				if state = done_state then
-					done <= '1';
-				else
-					done <= '0';
-				end if;
-			end if;
-	end process output_process;
-	
-	
+	for i in iterations downto 0 generate
+		cu0: computational_unit
+			generic map (
+				iterations 	=> total_iterations,
+				threshold	=> threshold
+			)
+			port map (
+				fpga_clock 	=> fpga_clock,
+				reset 		=> computation_reset,
+				enable 		=> computation_enable,
+				seed 		=> seed,
+				done		=> computation_done,
+				iteration_count => iterations
+			);
+	end generate;
 end architecture logic; 

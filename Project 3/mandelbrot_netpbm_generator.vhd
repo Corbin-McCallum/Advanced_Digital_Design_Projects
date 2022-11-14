@@ -22,13 +22,13 @@ architecture test_fixture of mandelbrot_netpbm_generator is
 		);
 		port (
 			-- Input ports
-			reset:		in	std_logic;
-			fpga_clock:	in	std_logic;
+			reset:		in		std_logic;
+			fpga_clock:	in		std_logic;
 			-- Output ports
-			address:	out 	natural;
+			address:		out 	natural;
 			iterations:	out 	natural;
-			done:		out 	std_logic;
-			wren:		out 	std_logic
+			done:		 	out 	std_logic;
+			wren:			out 	std_logic
 		);
 	end component control_unit;
 
@@ -53,15 +53,15 @@ begin
 	generator:control_unit
 		generic map (
 			total_iterations 	=> iterations,
-			threshold		=> escape
+			threshold			=> escape
 		)
 		port map (
-			fpga_clock		=> clock,
-			reset 			=> reset,
-			address			=> open,
-			done			=> done,
-			iterations		=> iteration_count,
-			wren			=> wren
+			fpga_clock			=> clock,
+			reset 				=> reset,
+			address				=> open,
+			done					=> done,
+			iterations		 	=> iteration_count,
+			wren					=> wren
 		);
 	
 	make_pgm: process

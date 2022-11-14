@@ -62,60 +62,60 @@ ARCHITECTURE SYN OF pll IS
 
 	COMPONENT altpll
 	GENERIC (
-		bandwidth_type			: STRING;
-		clk0_divide_by			: NATURAL;
-		clk0_duty_cycle			: NATURAL;
+		bandwidth_type		: STRING;
+		clk0_divide_by		: NATURAL;
+		clk0_duty_cycle		: NATURAL;
 		clk0_multiply_by		: NATURAL;
 		clk0_phase_shift		: STRING;
 		compensate_clock		: STRING;
 		inclk0_input_frequency		: NATURAL;
 		intended_device_family		: STRING;
-		lpm_hint			: STRING;
-		lpm_type			: STRING;
-		operation_mode			: STRING;
-		pll_type			: STRING;
+		lpm_hint		: STRING;
+		lpm_type		: STRING;
+		operation_mode		: STRING;
+		pll_type		: STRING;
 		port_activeclock		: STRING;
-		port_areset			: STRING;
-		port_clkbad0			: STRING;
-		port_clkbad1			: STRING;
-		port_clkloss			: STRING;
-		port_clkswitch			: STRING;
+		port_areset		: STRING;
+		port_clkbad0		: STRING;
+		port_clkbad1		: STRING;
+		port_clkloss		: STRING;
+		port_clkswitch		: STRING;
 		port_configupdate		: STRING;
-		port_fbin			: STRING;
-		port_inclk0			: STRING;
-		port_inclk1			: STRING;
-		port_locked			: STRING;
-		port_pfdena			: STRING;
+		port_fbin		: STRING;
+		port_inclk0		: STRING;
+		port_inclk1		: STRING;
+		port_locked		: STRING;
+		port_pfdena		: STRING;
 		port_phasecounterselect		: STRING;
-		port_phasedone			: STRING;
-		port_phasestep			: STRING;
+		port_phasedone		: STRING;
+		port_phasestep		: STRING;
 		port_phaseupdown		: STRING;
-		port_pllena			: STRING;
-		port_scanaclr			: STRING;
-		port_scanclk			: STRING;
-		port_scanclkena			: STRING;
-		port_scandata			: STRING;
+		port_pllena		: STRING;
+		port_scanaclr		: STRING;
+		port_scanclk		: STRING;
+		port_scanclkena		: STRING;
+		port_scandata		: STRING;
 		port_scandataout		: STRING;
-		port_scandone			: STRING;
-		port_scanread			: STRING;
-		port_scanwrite			: STRING;
-		port_clk0			: STRING;
-		port_clk1			: STRING;
-		port_clk2			: STRING;
-		port_clk3			: STRING;
-		port_clk4			: STRING;
-		port_clk5			: STRING;
-		port_clkena0			: STRING;
-		port_clkena1			: STRING;
-		port_clkena2			: STRING;
-		port_clkena3			: STRING;
-		port_clkena4			: STRING;
-		port_clkena5			: STRING;
-		port_extclk0			: STRING;
-		port_extclk1			: STRING;
-		port_extclk2			: STRING;
-		port_extclk3			: STRING;
-		width_clock			: NATURAL
+		port_scandone		: STRING;
+		port_scanread		: STRING;
+		port_scanwrite		: STRING;
+		port_clk0		: STRING;
+		port_clk1		: STRING;
+		port_clk2		: STRING;
+		port_clk3		: STRING;
+		port_clk4		: STRING;
+		port_clk5		: STRING;
+		port_clkena0		: STRING;
+		port_clkena1		: STRING;
+		port_clkena2		: STRING;
+		port_clkena3		: STRING;
+		port_clkena4		: STRING;
+		port_clkena5		: STRING;
+		port_extclk0		: STRING;
+		port_extclk1		: STRING;
+		port_extclk2		: STRING;
+		port_extclk3		: STRING;
+		width_clock		: NATURAL
 	);
 	PORT (
 			inclk	: IN STD_LOGIC_VECTOR (1 DOWNTO 0);
@@ -250,7 +250,7 @@ END SYN;
 -- Retrieval info: PRIVATE: PHASE_RECONFIG_INPUTS_CHECK STRING "0"
 -- Retrieval info: PRIVATE: PHASE_SHIFT0 STRING "0.00000000"
 -- Retrieval info: PRIVATE: PHASE_SHIFT_STEP_ENABLED_CHECK STRING "0"
--- Retrieval info: PRIVATE: PHASE_SHIFT_UNIT0 STRING "deg"
+-- Retrieval info: PRIVATE: PHASE_SHIFT_UNIT0 STRING "ns"
 -- Retrieval info: PRIVATE: PLL_ADVANCED_PARAM_CHECK STRING "0"
 -- Retrieval info: PRIVATE: PLL_ARESET_CHECK STRING "0"
 -- Retrieval info: PRIVATE: PLL_AUTOPLL_CHECK NUMERIC "1"

@@ -1,4 +1,4 @@
-llibrary ieee;
+library ieee;
 
 library ads;
 use ads.ads_fixed.all;

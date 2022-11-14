@@ -10,13 +10,14 @@ entity vga_fsm is
 	);
 	port (
 		-- Input ports
-		c0:			in	std_logic; --clock input from pll
+		c0:				in	std_logic; --clock input from pll
 		reset:			in	std_logic;
+		enable:			in boolean;
 		--input from control_unit to vga_fsm
 		
 		-- Output ports
 		point:			out	coordinate;
-		point_valid:		out	boolean;
+		point_valid:	out	boolean;
 		h_sync:			out	std_logic;
 		v_sync:			out 	std_logic
 	);
@@ -31,7 +32,7 @@ begin
 		if rising_edge(c0) then
 			if reset = '0' then
 				current_point <= make_coordinate(0,0);
-			else
+			elsif enable then
 				current_point <= next_coordinate(current_point, vga_res);
 			end if;
 		end if;
@@ -42,8 +43,8 @@ begin
 	begin
 	
 		if rising_edge(c0) then 
-			h_sync 		<= do_horizontal_sync(current_point, vga_res);
-			v_sync 		<= do_vertical_sync(current_point, vga_res);
+			h_sync <= do_horizontal_sync(current_point, vga_res);
+			v_sync <= do_vertical_sync(current_point, vga_res);
 		end if;
 	end process sync_point;
 	
@@ -51,8 +52,8 @@ begin
 	check_point: process(c0) is
 	begin
 		if rising_edge(c0) then
-			point 		<= current_point;
-			point_valid 	<= point_visible(current_point, vga_res);
+			point <= current_point;
+			point_valid <= point_visible(current_point, vga_res);
 		end if;
 	end process check_point;
 end architecture fsm;

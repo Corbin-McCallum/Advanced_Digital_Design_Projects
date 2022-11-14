@@ -6,10 +6,10 @@ entity synchronizer is
 		stages: natural := 3
 	);
 	port (
-		clock:	in	std_logic;
-		reset:	in	std_logic;
-		data_in:	in	std_logic;
-		data_out:	out	std_logic
+		clock:	 in	std_logic;
+		reset:	 in	std_logic;
+		data_in:  in 	std_logic;
+		data_out: out std_logic
 	);
 end entity synchronizer;
 
@@ -21,7 +21,7 @@ begin
 	sreg: process(clock) is
 	begin
 		if rising_edge(clock) then
-			if reset = '1' then
+			if reset = '0' then
 				storage <= (others => '0');
 			else
 				storage <= storage(stages - 2 downto 0) & data_in;

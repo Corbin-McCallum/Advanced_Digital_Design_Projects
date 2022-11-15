@@ -1,12 +1,12 @@
 v 4
-file . "../mandelbrot_netpbm_generator.vhd" "68d43d222922c77ca86a2f88dfdcc07bbf777fbb" "20221102165531.833":
-  entity mandelbrot_netpbm_generator at 1( 0) + 0 on 24;
-  architecture test_fixture of mandelbrot_netpbm_generator at 15( 239) + 0 on 25;
-file . "../control_unit.vhd" "9cb4db3e36b464b2eba1ecc0493c0b43366b5849" "20221102165458.775":
-  entity control_unit at 1( 0) + 0 on 22;
-  architecture logic of control_unit at 29( 549) + 0 on 23;
-file . "../computational_unit.vhd" "9d30ec40ceddd7d219c1ae59d2c78060ca60a18f" "20221102165440.218":
-  entity computational_unit at 1( 0) + 0 on 20;
-  architecture computation of computational_unit at 26( 563) + 0 on 21;
-file . "../netpbm_config.vhd" "70743624761168459b07789574d4b4e249b4f8d2" "20221102162950.846":
-  package netpbm_config at 1( 0) + 0 on 15;
+file . "../mandelbrot_netpbm_generator.vhd" "ca6708b7d2b781b63464ca3ac5a3fac3aee110ed" "20221115021340.961":
+  entity mandelbrot_netpbm_generator at 1( 0) + 0 on 80;
+  architecture test_fixture of mandelbrot_netpbm_generator at 18( 275) + 0 on 81;
+file . "../control_unit.vhd" "245a1707cfef3ea823e03be5e675c96d652692cc" "20221115021340.279":
+  entity control_unit at 1( 0) + 0 on 77;
+  architecture logic of control_unit at 30( 597) + 0 on 78;
+file . "../computational_unit.vhd" "3783b76d057dba6167aa29fb5c140068bda700de" "20221115021339.937":
+  entity computational_unit at 1( 0) + 0 on 75;
+  architecture computation of computational_unit at 27( 594) + 0 on 76;
+file . "../netpbm_config.vhd" "70743624761168459b07789574d4b4e249b4f8d2" "20221115021340.662":
+  package netpbm_config at 1( 0) + 0 on 79;

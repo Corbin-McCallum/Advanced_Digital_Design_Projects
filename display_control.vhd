@@ -64,6 +64,7 @@ begin
 			
 			if state = increment_state then
 				tail <= tail + 1;
+				
 				if end_transfer = '1' then
 					write_en 	<= '0';
 				else

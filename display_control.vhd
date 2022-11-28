@@ -52,8 +52,17 @@ begin
 				if start_transfer = '1' then
 					write_en 	<= '1';
 				else
-					write_en 	<= '0';
 					start_transfer 	<= '1';
+				end if;
+			end if;
+		end if;
+			
+		if rising_edge(clock) then
+			if state = increment_state then
+				if end_transfer = '1' then
+					write_en 	<= '0';
+				else
+					end_transfer 	<= '1';
 				end if;
 			end if;
 		end if;

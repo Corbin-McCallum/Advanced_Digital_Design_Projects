@@ -8,11 +8,11 @@ use wysiwyg.fiftyfivenm_components.all;
 entity display_control is
 	port (
 		-- Input
-		clock:			in std_logic;
-		binary_code:		in std_logic;
+		clock:		in std_logic;
+		binary_code:	in std_logic;
 		-- Output
-		write_en:		out std_logic;
-		data_out:		out natural range 0 to 2**12 - 1
+		write_en:	out std_logic;
+		data_out:	out natural range 0 to 2**12 - 1
 	);
 end entity display_control;
 
@@ -34,6 +34,7 @@ begin
 					--check tail and head distance
 					if binary_code > tail then
 						if binary_code - tail > 1 then
+							-- increment tail
 							next_state <= increment_state;
 						else
 							next_state <= wait_state;
@@ -42,7 +43,7 @@ begin
 						next_state <= wait_state;
 					end if;
 				when increment_state =>
-					-- increment tail
+					-- wait
 					next_state <= wait_state;
 				when others =>
 					next_state <= wait_state;
@@ -62,6 +63,7 @@ begin
 			end if;
 			
 			if state = increment_state then
+				tail <= tail + 1;
 				if end_transfer = '1' then
 					write_en 	<= '0';
 				else

@@ -8,11 +8,11 @@ use wysiwyg.fiftyfivenm_components.all;
 entity display_control is
 	port (
 		-- Input
-		clock:				in	std_logic;
+		clock:			in	std_logic;
 		binary_code:		in	std_logic;
 		-- Output
-		write_en:			out std_logic;
-		data_out:			out natural range 0 to 2**12 - 1
+		write_en:		out std_logic;
+		data_out:		out natural range 0 to 2**12 - 1
 	);
 end entity display_control;
 
@@ -22,7 +22,7 @@ architecture logic of adc_control is
 
 	signal state, next_state: 	state_type;
 	signal start_transfer: 		std_logic;
-	signal end_transfer:	 		std_logic;
+	signal end_transfer:	 	std_logic;
 	
 begin
 
@@ -47,16 +47,16 @@ begin
 	output_process: process(clock) is
 		begin 
 							
-			if rising_edge(clock) then
-				if state = wait_state then
-					if start_transfer = '1' then
-						write_en <= '1';
-					else
-						write_en <= '0';
-						start_transfer <= '1';
-					end if;
+		if rising_edge(clock) then
+			if state = wait_state then
+				if start_transfer = '1' then
+					write_en <= '1';
+				else
+					write_en <= '0';
+					start_transfer <= '1';
 				end if;
 			end if;
+		end if;
 			
 	end process output_process;
 	

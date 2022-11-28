@@ -11,8 +11,8 @@ entity display_control is
 		clock:			in	std_logic;
 		binary_code:		in	std_logic;
 		-- Output
-		write_en:		out std_logic;
-		data_out:		out natural range 0 to 2**12 - 1
+		write_en:		out 	std_logic;
+		data_out:		out 	natural range 0 to 2**12 - 1
 	);
 end entity display_control;
 
@@ -50,10 +50,10 @@ begin
 		if rising_edge(clock) then
 			if state = wait_state then
 				if start_transfer = '1' then
-					write_en <= '1';
+					write_en 	<= '1';
 				else
-					write_en <= '0';
-					start_transfer <= '1';
+					write_en 	<= '0';
+					start_transfer 	<= '1';
 				end if;
 			end if;
 		end if;

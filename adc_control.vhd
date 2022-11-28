@@ -1,8 +1,14 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+library wysiwyg;
+use wysiwyg.fiftyfivenm_components.all;
 
 entity adc_control is
 	port (
 		clock_10:	in	std_logic;
-		clock_1:		in	std_logic;
+		clock_1:	in	std_logic;
 		
 		write_en:	out std_logic;
 		data_out:	out natural range 0 to 2**12 - 1
@@ -13,10 +19,10 @@ architecture logic of adc_control is
 	
 	component max10_adc is
 			port(
-				pll_clk:	in		std_logic;
-				chsel:	in		natural range 0 to 2**5 - 1;
-				soc:		in		std_logic;
-				tsen:		in		std_logic;
+				pll_clk:	in	std_logic;
+				chsel:		in	natural range 0 to 2**5 - 1;
+				soc:		in	std_logic;
+				tsen:		in	std_logic;
 				dout:		out	natural range 0 to 2**12 - 1;
 				eoc:		out	std_logic;
 				clk_dft:	out	std_logic
@@ -34,12 +40,12 @@ begin
 	ma0: max10_adc
 		port map (
 			pll_clk => clock_10,
-			chsel:  => '0',
-			soc:	  => start_conversion,
-			tsen:	  => '1' ,
-			dout:	  => data_out,
-			eoc:	  => end_conversion,
-			clk_dft:=> clock_1
+			chsel   => '0',
+			soc	=> start_conversion,
+			tsen	=> '1' ,
+			dout	=> data_out,
+			eoc	=> end_conversion,
+			clk_dft => clock_1
 		);
 		
 	transition_function: process(state, end_conversion) is
@@ -77,9 +83,9 @@ begin
 
 				if state = wait_state then
 					if end_conversion = '1' then
-						tsen = '0';
+						tsen := '0';
 					else
-						tsen = '1';
+						tsen := '1';
 					end if;
 				end if;
 				
@@ -93,5 +99,5 @@ begin
 			end if;
 	end process output_process;
 
-	
 		
+end architecture logic;

@@ -27,12 +27,16 @@ architecture logic of display_control is
 	
 	
 	function increment_ready(
-		head, tail: in natural;
+		head_pointer, tail_pointer: in natural;
 	) return boolean;
 	is 
 	begin
-		if head > tail and head - tail > 1 and head > 0 and tail < 7 then
-			return true;
+		if (head_pointer > tail_pointer) and (head_pointer - tail_pointer > 1) then
+			if (head_pointer > 0) and (tail_pointer < 7) then
+				return true;
+			else
+				return false;
+			end if
 		else
 			return false
 		end if;

@@ -6,20 +6,25 @@ library wysiwyg;
 use wysiwyg.fiftyfivenm_components.all;
 
 entity display_control is
+	generic(
+		max_address:	natural:= 16;
+	);
 	port (
 		-- Input
-		clock:			in std_logic;
-		binary_code:		in std_logic;
+		clock_50:		in 	std_logic;
+		head_ptr:		in 	std_logic;
+		reset:			in	std_logic;
 		-- Output
-		write_en:		out std_logic;
-		data_out:		out natural range 0 to 2**12 - 1
+		write_en:		out 	std_logic;
+		tail_ptr:		out	natural range 0 to max_address - 1;
+		data_out:		out 	natural range 0 to 2**12 - 1
 	);
 end entity display_control;
 
 architecture logic of display_control is
 	
-	type 		state_type is (wait_state, increment_state);
-	
+	type 		state_type is (wait_state, increment_state, data_out_state);
+		
 	signal	tail:			natural;
 	signal 	state, next_state: 	state_type;
 	signal 	start_transfer: 	std_logic;
@@ -28,7 +33,7 @@ architecture logic of display_control is
 	
 	function increment_ready(
 		head_pointer, tail_pointer: in natural
-	) return boolean;
+	) return boolean
 	is 
 	begin
 		if (head_pointer > tail_pointer) and (head_pointer - tail_pointer > 1) then
@@ -38,18 +43,18 @@ architecture logic of display_control is
 				return false;
 			end if;
 		else
-			return false
+			return false;
 		end if;
 	end function increment_ready;
 	
 begin
-
+	tail_ptr <= tail;
 	transition_function: process(state, end_transfer) is
 		begin
 			case state is
 				when wait_state => 
 					--check tail and head distance
-					if increment_ready(binary_code, tail) then
+					if increment_ready(head_ptr, tail) then
 						next_state <= increment_state;
 					else
 						next_state <= wait_state;
@@ -62,10 +67,20 @@ begin
 			end case;
 	end process transition_function;
 	
-	output_process: process(clock) is
+	save_state: process(clock_50, reset) is
+	begin
+		if reset = '0' then
+			state <= wait_state;
+		elsif rising_edge(clock_50) then
+			state <= next_state;
+		end if;
+	end process save_state;
+	
+	output_process: process(clock_50) is
 		begin 
-							
-		if rising_edge(clock) then
+		if reset = '0' then
+			tail <= max_address - 1;					
+		elsif rising_edge(clock_50) then
 			if state = wait_state then
 				if start_transfer = '1' then
 					write_en 	<= '1';

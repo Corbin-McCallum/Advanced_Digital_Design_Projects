@@ -36,7 +36,7 @@ architecture logic of display_control is
 				return true;
 			else
 				return false;
-			end if
+			end if;
 		else
 			return false
 		end if;

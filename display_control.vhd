@@ -7,7 +7,7 @@ use wysiwyg.fiftyfivenm_components.all;
 
 entity display_control is
 	generic(
-		max_address:	natural:= 16;
+		max_address:	natural:= 16
 	);
 	port (
 		-- Input

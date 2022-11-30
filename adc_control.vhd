@@ -8,10 +8,11 @@ use wysiwyg.fiftyfivenm_components.all;
 entity adc_control is
 	generic (
 		max_address:	natural := 16
+	);
 	port (
-		clock_10:	in		std_logic;
-		tail_ptr:	in		natural range 0 to max_address - 1;
-		reset:		in		std_logic;
+		clock_10:	in	std_logic;
+		tail_ptr:	in	natural range 0 to max_address - 1;
+		reset:		in	std_logic;
 		
 		clock_1:	out	std_logic;
 		
@@ -24,19 +25,19 @@ end entity adc_control;
 architecture logic of adc_control is
 	
 	component max10_adc is
-	   port(
-		pll_clk:	in	std_logic;
-		chsel:		in	natural range 0 to 2**5 - 1;
-		soc:		in	std_logic;
-		tsen:		in	std_logic;
-		dout:		out	natural range 0 to 2**12 - 1;
-		eoc:		out	std_logic;
-		clk_dft:	out	std_logic
-	   );
+			port(
+				pll_clk:	in	std_logic;
+				chsel:		in	natural range 0 to 2**5 - 1;
+				soc:		in	std_logic;
+				tsen:		in	std_logic;
+				dout:		out	natural range 0 to 2**12 - 1;
+				eoc:		out	std_logic;
+				clk_dft:	out	std_logic
+			);
 	end component max10_adc;
 	
 	type state_type is (
-		idle_state, start_state, wait_state, write_state, data_out_state);
+			idle_state, start_state, wait_state, write_state, data_out_state);
 	
 	signal clk_dft: std_logic;
 	signal head: natural range 0 to max_addresses - 1;
@@ -68,7 +69,7 @@ begin
 	ma0: max10_adc
 		port map (
 			pll_clk => clock_10,
-			chsel   => '0',
+			chsel   => 0,
 			soc	=> start_conversion,
 			tsen	=> '1' ,
 			dout	=> data_out,

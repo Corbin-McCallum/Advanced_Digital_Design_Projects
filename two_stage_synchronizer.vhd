@@ -6,8 +6,8 @@ entity two_stage_synchronizer is
 		input_width: positive := 16
 	);
 	port (
-		data_in:		in 	std_logic_vector(input_width - 1 downto 0);
-		clk_1:		in		std_logic;
+		data_in:	in 	std_logic_vector(input_width - 1 downto 0);
+		clk_1:		in	std_logic;
 		clk_2:		in 	std_logic;
 		data_out:	out 	std_logic_vector(input_Width - 1 downto 0)
 	);
@@ -34,28 +34,28 @@ architecture logic of two_stage_synchronizer is
 		);
 	end component gray_to_binary;
 	
-	signal btg_signal: 			std_logic_vector(input_width -1 downto 0);
+	signal btg_signal: 		std_logic_vector(input_width -1 downto 0);
 	signal btg_clk_1_signal:	std_logic_vector(input_width -1 downto 0);
 	signal btg_clk_2_signal: 	std_logic_vector(input_width -1 downto 0);
-	signal gtb_signal:			std_logic_vector(input_width -1 downto 0);
+	signal gtb_signal:		std_logic_vector(input_width -1 downto 0);
 begin
 	
 	b2g: bin_to_gray
 			generic map (
-				input_width => input_width
+				input_width 	=> input_width
 			)
 			port map (
-				bin_in	=> data_in,
+				bin_in		=> data_in,
 				gray_out	=> btg_signal 
 			);
 			
 	g2b: gray_to_bin
 			generic map(
-				input_width => input_width
+				input_width 	=> input_width
 			)
 			port map(
-				gray_in => gtb_signal,
-				bin_out => data_out
+				gray_in 	=> gtb_signal,
+				bin_out 	=> data_out
 			);
 			
 	s1: process(clk_1) is

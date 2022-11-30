@@ -93,10 +93,10 @@ begin
 			input_width	=> input_width
 		)
 		port map(
-			data_in:	=> head_ptr_1,
-			clk_1:		=> clock_1,
-			clk_2:		=> clock_50,
-			data_out:	=> head_ptr_50
+			data_in		=> head_ptr_1,
+			clk_1		=> clock_1,
+			clk_2		=> clock_50,
+			data_out	=> head_ptr_50
 		);
 		
 	tss1: two_stage_synchronizer
@@ -104,10 +104,10 @@ begin
 			input_width	=> input_width
 		)
 		port map(
-			data_in:	=> tail_ptr_50,
-			clk_1:		=> clock_50,
-			clk_2:		=> clock_1,
-			data_out:	=> tail_ptr_1
+			data_in		=> tail_ptr_50,
+			clk_1		=> clock_50,
+			clk_2		=> clock_1,
+			data_out	=> tail_ptr_1
 		);
 
 

@@ -12,20 +12,18 @@ entity display_control is
 	port (
 		-- Input
 		clock_50:		in 	std_logic;
-		head_ptr:		in 	std_logic;
+		head_ptr:		in 	natural range 0 to max_address - 1;
 		reset:			in	std_logic;
 		-- Output
-		write_en:		out 	std_logic;
-		tail_ptr:		out	natural range 0 to max_address - 1;
-		data_out:		out 	natural range 0 to 2**12 - 1
+		tail_ptr:		out	natural range 0 to max_address - 1
 	);
 end entity display_control;
 
 architecture logic of display_control is
 	
-	type 		state_type is (wait_state, increment_state, data_out_state);
+	type 		state_type is (wait_state, increment_state);
 		
-	signal	tail:			natural;
+	signal	tail:			natural range 0 to max_addresses - 1;
 	signal 	state, next_state: 	state_type;
 	signal 	start_transfer: 	std_logic;
 	signal 	end_transfer:	 	std_logic;
@@ -80,20 +78,12 @@ begin
 		begin 
 		if reset = '0' then
 			tail <= max_address - 1;					
-		elsif rising_edge(clock_50) then
-			if state = wait_state then
-				if start_transfer = '1' then
-					write_en 	<= '1';
-				else
-					start_transfer 	<= '1';
-				end if;
-			end if;
-			
+		elsif rising_edge(clock_50) then			
 			if state = increment_state then
-				if end_transfer = '1' then
-					write_en 	<= '0';
+				if tail = max_address - 1 then
+					tail <= 0;
 				else
-					end_transfer 	<= '1';
+					tail <= tail + 1;
 				end if;
 			end if;
 		end if;

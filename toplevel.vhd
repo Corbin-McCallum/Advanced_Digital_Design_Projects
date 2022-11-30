@@ -42,7 +42,7 @@ begin
 	ac0: adc_control
 		generic map(
 			max_address 	=> max_address
-		);
+		)
 		port map(
 			clock_10 	=> clock_10,
 			clock_1  	=> clock_1,
@@ -57,7 +57,7 @@ begin
 	dc0: display_control
 		generic map(
 			max_address => max_address
-		);
+		)
 		port map(
 			-- Input
 			clock_50	=> clock_50 ,
@@ -72,7 +72,7 @@ begin
 		(
 			DATA_WIDTH 	=> address_width,
 			ADDR_WIDTH 	=> addr_width_signal
-		);
+		)
 
 		port map
 		(
@@ -89,10 +89,10 @@ begin
 		);
 		
 	tss0: two_stage_synchronizer
-		generic (
+		generic map(
 			input_width	=> input_width
-		);
-		port (
+		)
+		port map(
 			data_in:	=> head_ptr_1,
 			clk_1:		=> clock_1,
 			clk_2:		=> clock_50,
@@ -100,10 +100,10 @@ begin
 		);
 		
 	tss1: two_stage_synchronizer
-		generic (
+		generic map(
 			input_width	=> input_width
-		);
-		port (
+		)
+		port map(
 			data_in:	=> tail_ptr_50,
 			clk_1:		=> clock_50,
 			clk_2:		=> clock_1,

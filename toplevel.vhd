@@ -90,7 +90,7 @@ begin
 		
 	tss0: two_stage_synchronizer
 		generic (
-			input_width	=> 
+			input_width	=> input_width
 		);
 		port (
 			data_in:	=> head_ptr_1,
@@ -101,7 +101,7 @@ begin
 		
 	tss1: two_stage_synchronizer
 		generic (
-			input_width	=> 
+			input_width	=> input_width
 		);
 		port (
 			data_in:	=> tail_ptr_50,

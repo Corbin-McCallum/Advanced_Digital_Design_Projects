@@ -24,6 +24,13 @@ end entity adc_control;
 
 architecture logic of adc_control is
 	
+	component pll
+		port (
+			inclk0:	in	std_logic := '0';
+			c0:	out 	std_logic 
+		);
+	end component;
+	
 	component max10_adc is
 			port(
 				pll_clk:	in	std_logic;
@@ -38,9 +45,9 @@ architecture logic of adc_control is
 	
 	type state_type is (
 			idle_state, start_state, wait_state, write_state, data_out_state);
-	
+	signal pll_clock_out: std_logic;
 	signal clk_dft: std_logic;
-	signal head: natural range 0 to max_addresses - 1;
+	signal head: natural range 0 to max_address - 1;
 	signal state, next_state: state_type;
 	signal start_conversion: std_logic;
 	signal end_conversion:	 std_logic;
@@ -50,13 +57,9 @@ architecture logic of adc_control is
 	) return boolean
 	is 
 	begin
-		if (head_pointer > tail_pointer) then
-			if (head_pointer > 7) and (tail_pointer < 0) then
-				return false;
-			else
-				return true;
-			end if;
-		elsif (tail_pointer-head_pointer > 1) then
+		if (head_pointer > tail_pointer) and not (head_pointer = (max_address - 1) and tail_pointer = 0) then
+			return true;
+		elsif (tail_pointer > head_pointer) and (tail_pointer - head_pointer > 1) then
 			return true;
 		end if;
 		return false;
@@ -66,9 +69,15 @@ begin
 	clock_1 <= clk_dft;
 	head_ptr <= head;
 
+	pll0: pll
+		port map (
+			inclk0	=> clock_10,
+			c0			=> pll_clock_out
+		);
+	
 	ma0: max10_adc
 		port map (
-			pll_clk => clock_10,
+			pll_clk => pll_clock_out,
 			chsel   => 0,
 			soc	=> start_conversion,
 			tsen	=> '1' ,
@@ -77,7 +86,7 @@ begin
 			clk_dft => clk_dft
 		);
 		
-	transition_function: process(state, end_conversion) is
+	transition_function: process(state, end_conversion, head, tail_ptr) is
 		begin
 			case state is
 				when idle_state => 
@@ -127,7 +136,7 @@ begin
 				end if;
 				
 				if state = data_out_state then
-					if head = max_addresses - 1 then
+					if head = max_address - 1 then
 						head <= 0;
 					else
 						head <= head + 1;

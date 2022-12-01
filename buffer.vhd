@@ -18,16 +18,16 @@ entity true_dual_port_ram_dual_clock is
 
 	port 
 	(
-		clk_a	: in std_logic;
-		clk_b	: in std_logic;
-		addr_a	: in natural range 0 to 2**ADDR_WIDTH - 1;
-		addr_b	: in natural range 0 to 2**ADDR_WIDTH - 1;
-		data_a	: in std_logic_vector((DATA_WIDTH-1) downto 0);
-		data_b	: in std_logic_vector((DATA_WIDTH-1) downto 0);
-		we_a	: in std_logic := '1';
-		we_b	: in std_logic := '1';
-		q_a		: out std_logic_vector((DATA_WIDTH -1) downto 0);
-		q_b		: out std_logic_vector((DATA_WIDTH -1) downto 0)
+		clk_a	: 	in std_logic;
+		clk_b	: 	in std_logic;
+		addr_a: 	in natural range 0 to 2**ADDR_WIDTH - 1;
+		addr_b: 	in natural range 0 to 2**ADDR_WIDTH - 1;
+		data_a: 	in std_logic_vector((DATA_WIDTH-1) downto 0);
+		data_b: 	in std_logic_vector((DATA_WIDTH-1) downto 0);
+		we_a	: 	in std_logic := '1';
+		we_b	: 	in std_logic := '1';
+		q_a	: 	out std_logic_vector((DATA_WIDTH -1) downto 0);
+		q_b	: 	out std_logic_vector((DATA_WIDTH -1) downto 0)
 	);
 
 end true_dual_port_ram_dual_clock;

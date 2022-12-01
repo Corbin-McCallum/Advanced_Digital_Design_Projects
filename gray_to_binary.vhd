@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity gray_to_bin is
+entity gray_to_binary is
 	generic (
 		input_width: positive := 16
 	);
@@ -9,9 +9,9 @@ entity gray_to_bin is
 		gray_in: in std_logic_vector(input_width - 1 downto 0);
 		bin_out: out std_logic_vector(input_width - 1 downto 0)
 	);
-end entity gray_to_bin;
+end entity gray_to_binary;
 
-architecture rtl of gray_to_bin is
+architecture rtl of gray_to_binary is
 	function unary_xor (
 		vector: in std_logic_vector
 	) return std_logic

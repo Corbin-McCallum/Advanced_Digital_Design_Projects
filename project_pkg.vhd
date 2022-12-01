@@ -8,11 +8,11 @@ component adc_control is
 		max_address:	natural := 16
 	);
 	port (
-		clock_10:	in		std_logic;
-		tail_ptr:	in		natural range 0 to max_address - 1;
-		reset:		in		std_logic;
+		clock_10:	in	std_logic;
+		tail_ptr:	in	natural range 0 to max_address - 1;
+		reset:		in	std_logic;
 		
-		clock_1:		out	std_logic;
+		clock_1:	out	std_logic;
 		
 		write_en:	out 	std_logic;
 		data_out:	out 	natural range 0 to 2**12 - 1;
@@ -27,11 +27,11 @@ component display_control is
 	);
 	port (
 		-- Input
-		clock_50:		in 	std_logic;
-		head_ptr:		in 	natural range 0 to max_address - 1;
-		reset:			in		std_logic;
+		clock_50:	in 	std_logic;
+		head_ptr:	in 	natural range 0 to max_address - 1;
+		reset:		in	std_logic;
 		-- Output
-		tail_ptr:		out	natural range 0 to max_address - 1
+		tail_ptr:	out	natural range 0 to max_address - 1
 	);
 end component display_control;
 
@@ -65,8 +65,8 @@ component two_stage_synchronizer is
 		input_width: positive := 16
 	);
 	port (
-		data_in:		in 	std_logic_vector(input_width - 1 downto 0);
-		clk_1:		in		std_logic;
+		data_in:	in 	std_logic_vector(input_width - 1 downto 0);
+		clk_1:		in	std_logic;
 		clk_2:		in 	std_logic;
 		data_out:	out 	std_logic_vector(input_Width - 1 downto 0)
 	);

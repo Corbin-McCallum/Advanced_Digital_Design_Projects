@@ -11,11 +11,11 @@ entity display_control is
 	);
 	port (
 		-- Input
-		clock_50:		in 	std_logic;
-		head_ptr:		in 	natural range 0 to max_address - 1;
-		reset:			in	std_logic;
+		clock_50:	in 	std_logic;
+		head_ptr:	in 	natural range 0 to max_address - 1;
+		reset:		in	std_logic;
 		-- Output
-		tail_ptr:		out	natural range 0 to max_address - 1
+		tail_ptr:	out	natural range 0 to max_address - 1
 	);
 end entity display_control;
 
@@ -23,7 +23,7 @@ architecture logic of display_control is
 	
 	type 		state_type is (wait_state, increment_state);
 		
-	signal	tail:			natural range 0 to max_addresses - 1;
+	signal	tail:			natural range 0 to max_address - 1;
 	signal 	state, next_state: 	state_type;
 	signal 	start_transfer: 	std_logic;
 	signal 	end_transfer:	 	std_logic;
@@ -35,19 +35,16 @@ architecture logic of display_control is
 	is 
 	begin
 		if (head_pointer > tail_pointer) and (head_pointer - tail_pointer > 1) then
-			if (head_pointer > 0) and (tail_pointer < 7) then
-				return true;
-			else
-				return false;
-			end if;
-		else
-			return false;
+			return true;
+		elsif (tail_pointer > head_pointer) and not (head_pointer = 0 and tail_pointer = (max_address - 1)) then
+			return true;
 		end if;
+		return false;
 	end function increment_ready;
 	
 begin
 	tail_ptr <= tail;
-	transition_function: process(state, end_transfer) is
+	transition_function: process(state, end_transfer, tail, head_ptr) is
 		begin
 			case state is
 				when wait_state => 
@@ -74,7 +71,7 @@ begin
 		end if;
 	end process save_state;
 	
-	output_process: process(clock_50) is
+	output_process: process(clock_50, reset) is
 		begin 
 		if reset = '0' then
 			tail <= max_address - 1;					

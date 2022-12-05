@@ -38,7 +38,8 @@ architecture logic of seven_segment_agent is
 	begin
 		for i in seven_segment_output'range loop
 			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a;
-		end loop
+		end loop;
+
 		return ret;
 	end function concat_function;
 begin

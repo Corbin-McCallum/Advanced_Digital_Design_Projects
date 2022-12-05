@@ -56,4 +56,4 @@ begin
 		
 		end if;
 	end process change_trigger;
-end architecture;
+end architecture logic;

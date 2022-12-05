@@ -42,39 +42,47 @@ package seven_segment_config is
 	
 	function get_hex_digit (
 		digit:			in 	hex_digit;
-		lap_mode:		in 	lamp_configuration := default_lamp_config
+		lamp_mode:		in 	lamp_configuration := default_lamp_config
 	) return seven_segment_config;
 	
 	function lamps_off (
-		lap_mode:		in 	lamp_configuration := default_lamp_config
+		lamp_mode:		in 	lamp_configuration := default_lamp_config
 	) return seven_segment_config;
 	
 end package seven_segment_config;
 
 package body seven_segment_config is
-
+	function "not" (
+		seg : in seven_segment_config
+	) return seven_segment_config
+	is
+	begin
+		return ( a => not seg.a, b => not seg.b, c => not seg.c,
+					d => not seg.d, e => not seg.e, f => not seg.f,
+					g => not seg.g);
+	end function "not";
+	
 	function get_hex_digit (
 			digit:			in 	hex_digit;
 			lamp_mode:		in 	lamp_configuration := default_lamp_config
-	) return seven_segment_config;
+	) return seven_segment_config
 	is
 	begin
-		if digit = digit'high then
-			return 0;
+		if lamp_mode = common_anode then
+			return not seven_segment_table(digit);
 		end if;
-		
-		if lamp_mode = common_anode
-			return seven_segment_table(digit);
-		end
+		return seven_segment_table(digit);
 	end function get_hex_digit;
 	
 	function lamps_off (
-		lamp_mode:		in 	lamp_configuration := default_lamp_config;
-	) return seven_segment_config;
+		lamp_mode:		in 	lamp_configuration := default_lamp_config
+	) return seven_segment_config
 	is
 	begin
-		return seven_segment_table(0);
+		if lamp_mode = common_anode then
+			return ( others => '1' );
+		end if;
+		return ( others => '0' );
 	end function lamps_off;
-	
 	
 end package body seven_segment_config;

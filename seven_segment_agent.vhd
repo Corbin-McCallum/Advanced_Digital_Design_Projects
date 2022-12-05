@@ -40,7 +40,7 @@ architecture logic of seven_segment_agent is
 			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a;
 		end loop;
 		return ret;
-	end concat_function;
+	end function concat_function;
 begin
 
 	-- Clock trigger

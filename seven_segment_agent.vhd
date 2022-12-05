@@ -6,19 +6,19 @@ use work.seven_segment_config.all;
 
 entity seven_segment_agent is
 	generic (
-		lamp_mode: 				lamp_configuration;
-		decimal_support:		boolean;
-		implementer: 			natural;
-		revision: 				natural
+		lamp_mode: 		lamp_configuration;
+		decimal_support:	boolean;
+		implementer: 		natural;
+		revision: 		natural
 	);
 	port (
 		-- Input ports
-		clk:				in		std_logic;
-		reset_n:			in		std_logic;
-		address:			in		std_logic_vector(1 downto 0);
-		read:				in		std_logic;
-		write:			in		std_logic;
-		writedata:		in		std_logic_vector(31 downto 0);
+		clk:			in	std_logic;
+		reset_n:		in	std_logic;
+		address:		in	std_logic_vector(1 downto 0);
+		read:			in	std_logic;
+		write:			in	std_logic;
+		writedata:		in	std_logic_vector(31 downto 0);
 		-- Output ports
 		readdata:		out	std_logic_vector(31 downto 0);
 		lamps:			out 	std_logic_vector(41 downto 0)

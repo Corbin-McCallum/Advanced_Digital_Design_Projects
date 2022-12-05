@@ -47,8 +47,10 @@ begin
 	change_trigger: process(clk) is
 	begin
 		if rising_edge(clk) then
-			control 	<= '0';
-			data 		<= '0';
+			if reset_n = '1' then
+				control 	<= '0';
+				data 		<= '0';
+			end if;
 		else
 		
 		end if;

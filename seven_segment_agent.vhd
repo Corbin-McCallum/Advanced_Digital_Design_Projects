@@ -37,7 +37,7 @@ architecture logic of seven_segment_agent is
 		variable ret:	std_logic_vector(41 downto 0);
 	begin
 		for i in seven_segment_output'range loop
-			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a;
+			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a
 		end loop;
 
 		return ret;

@@ -30,11 +30,11 @@ architecture logic of seven_segment_agent is
 	signal control: 	std_logic_vector(31 downto 0);
 	signal data: 		std_logic_vector(31 downto 0);
 	-- functions
-	function: concat_function(
+	function concat_function(
 		config:		in	seven_segment_output
-	) return std_logic_vector;
+	) return std_logic_vector
 	is
-		variable ret:	std_logic_vector(41 downto 0)
+		variable ret:	std_logic_vector(41 downto 0);
 	begin
 		for i in seven_segment_output'range loop
 			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a;
@@ -49,8 +49,8 @@ begin
 	begin
 		if rising_edge(clk) then
 			if reset_n = '1' then
-				control 	<= '0';
-				data 		<= '0';
+				control 	:= '0';
+				data 		:= '0';
 			end if;
 		else
 		

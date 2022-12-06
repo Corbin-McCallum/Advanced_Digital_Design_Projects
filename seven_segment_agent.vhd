@@ -102,6 +102,7 @@ begin
 					when "01" => readdata <= control;
 					when "10" => readdata <= get_features;
 					when "11" => readdata <= std_logic_vector(to_unsigned(16#41445335#, 32));
+					when others => null;
 				end case;
 			elsif write = '1' then
 				case address is

@@ -183,7 +183,7 @@ begin
 								control(1) <= writedata(1);
 							end if;
 							if decimal_support and signed_support then
-								control(3) <= write_data(3);
+								control(3) <= writedata(3);
 							end if;
 							control(0) <= writedata(0);
 					when others => null;

@@ -6,19 +6,19 @@ use work.seven_segment_config.all;
 
 entity seven_segment_agent is
 	generic (
-		lamp_mode: 			lamp_configuration;
+		lamp_mode: 				lamp_configuration;
 		decimal_support:		boolean;
-		implementer: 			natural;
-		revision: 			natural;
+		implementer: 			natural	:= 200;
+		revision: 				natural	:= 0;
 		signed_support: 		boolean;
-		blank_zeros_support		boolean
+		blank_zeros_support	boolean
 	);
 	port (
 		-- Input ports
-		clk:			in	std_logic;
-		reset_n:		in	std_logic;
-		address:		in	std_logic_vector(1 downto 0);
-		read:			in	std_logic;
+		clk:				in	std_logic;
+		reset_n:			in	std_logic;
+		address:			in	std_logic_vector(1 downto 0);
+		read:				in	std_logic;
 		write:			in	std_logic;
 		writedata:		in	std_logic_vector(31 downto 0);
 		-- Output ports
@@ -31,6 +31,25 @@ architecture logic of seven_segment_agent is
 	-- signals
 	signal control: 	std_logic_vector(31 downto 0);
 	signal data: 		std_logic_vector(31 downto 0);
+	signal features:	std_logic_vector(31 downto 0);
+	-- procedures
+	procedure get_features
+		return std_logic_vector
+	is
+		variable ret: std_logic_vector(31 downto 0);
+	begin
+		ret := (others => '0');
+		ret(31 downto 24) := std_logic_vector(to_unsigned(implementer, 8));
+		ret(23 downto 16) := std_logic_vector(to_unsigned(revision, 8));
+		if lamp_mode = common_anode then
+			ret(3) = '1';
+		end if;
+		
+		if decimal_support then
+			ret(0) = '1';
+		end if;
+		return ret;
+	end procedure get_features;
 	-- functions
 	function concat_function(
 		config:		in	seven_segment_output
@@ -55,15 +74,15 @@ begin
 				data <= (others => '0');
 			elsif read = '1' then
 				case address is
-					when "00" =>
-					when "01" =>
-					when "10" =>
-					when "11" =>
+					when "00" => readdata <= data;
+					when "01" => readdata <= control;
+					when "10" => readdata <= get_features;
+					when "11" => readdata <= std_logic_vector(to_unsigned(16#41445335#, 32));
 				end case;
 			elsif write = '1' then
 				case address is
-					when "00" =>
-					when "01" =>
+					when "00" => writedata <= data;
+					when "01" => writedata <= control;
 					when others => null;
 				end case;
 			end if;

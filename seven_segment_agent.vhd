@@ -7,7 +7,7 @@ use work.seven_segment_pkg.all;
 entity seven_segment_agent is
 	generic (
 		lamp_mode: 		lamp_configuration := common_anode;
-		decimal_support:	boolean 	:= true;
+		decimal_support:	boolean := true;
 		implementer: 		natural	:= 200;
 		revision: 		natural	:= 0;
 		signed_support: 	boolean	:= true;

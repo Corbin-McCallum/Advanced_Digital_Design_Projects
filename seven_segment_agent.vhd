@@ -33,7 +33,7 @@ architecture logic of seven_segment_agent is
 	signal data: 		std_logic_vector(31 downto 0);
 	signal features:	std_logic_vector(31 downto 0);
 	-- procedures
-	procedure get_features
+	function get_features
 		return std_logic_vector
 	is
 		variable ret: std_logic_vector(31 downto 0);
@@ -43,18 +43,18 @@ architecture logic of seven_segment_agent is
 		ret(23 downto 16) := std_logic_vector(to_unsigned(revision, 8));
 
 		if lamp_mode = common_anode then
-			ret(3) = '1';
+			ret(3) := '1';
 		end if;
 		
 		if decimal_support then
-			ret(0) = '1';
+			ret(0) := '1';
 		end if;
 		
 		if blank_zeros_support then
-			ret(2) = '1';
+			ret(2) := '1';
 		end if;
 		return ret;
-	end procedure get_features;
+	end function get_features;
 	-- functions
 	function concat_function(
 		config:		in	seven_segment_output

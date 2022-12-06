@@ -1,29 +1,22 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-
-use work.seven_segment_config.all;
-
-entity seven_segment_agent is
-	generic (
-		lamp_mode: 			lamp_configuration;
-		decimal_support:		boolean;
-		implementer: 			natural	:= 200;
-		revision: 			natural	:= 0;
-		signed_support: 		boolean;
-		blank_zeros_support:		boolean
+generic (
+		lamp_mode: 		lamp_configuration := common_anode;
+		decimal_support:	boolean 	:= true;
+		implementer: 		natural	:= 200;
+		revision: 		natural	:= 0;
+		signed_support: 	boolean	:= true;
+		blank_zeros_support:	boolean	:= true
 	);
 	port (
 		-- Input ports
-		clk:			in	std_logic;
-		reset_n:		in	std_logic;
-		address:		in	std_logic_vector(1 downto 0);
-		read:			in	std_logic;
-		write:			in	std_logic;
-		writedata:		in	std_logic_vector(31 downto 0);
+		clk:		in	std_logic;
+		reset_n:	in	std_logic;
+		address:	in	std_logic_vector(1 downto 0);
+		read:		in	std_logic;
+		write:		in	std_logic;
+		writedata:	in	std_logic_vector(31 downto 0);
 		-- Output ports
-		readdata:		out	std_logic_vector(31 downto 0);
-		lamps:			out 	std_logic_vector(41 downto 0)
+		readdata:	out	std_logic_vector(31 downto 0);
+		lamps:		out 	std_logic_vector(41 downto 0)
 	);
 end entity seven_segment_agent;
 
@@ -32,6 +25,7 @@ architecture logic of seven_segment_agent is
 	signal control: 	std_logic_vector(31 downto 0);
 	signal data: 		std_logic_vector(31 downto 0);
 	signal features:	std_logic_vector(31 downto 0);
+	
 	-- procedures
 	function get_features
 		return std_logic_vector
@@ -55,6 +49,7 @@ architecture logic of seven_segment_agent is
 		end if;
 		return ret;
 	end function get_features;
+	
 	-- functions
 	function concat_function(
 		config:		in	seven_segment_output
@@ -86,8 +81,8 @@ begin
 				end case;
 			elsif write = '1' then
 				case address is
-					when "00" => writedata <= data;
-					when "01" => writedata <= control;
+					when "00" => data <= writedata;
+					when "01" => control <= writedata;
 					when others => null;
 				end case;
 			end if;

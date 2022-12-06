@@ -13,10 +13,10 @@ entity seven_segment_agent is
 	);
 	port (
 		-- Input ports
-		clk:			in	std_logic;
-		reset_n:		in	std_logic;
-		address:		in	std_logic_vector(1 downto 0);
-		read:			in	std_logic;
+		clk:				in	std_logic;
+		reset_n:			in	std_logic;
+		address:			in	std_logic_vector(1 downto 0);
+		read:				in	std_logic;
 		write:			in	std_logic;
 		writedata:		in	std_logic_vector(31 downto 0);
 		-- Output ports
@@ -49,8 +49,10 @@ begin
 	begin
 		if rising_edge(clk) then
 			if reset_n = '1' then
-				control 	:= '0';
-				data 		:= '0';
+			for i in control'range loop
+				control(i) 	<= '0';
+				data(i)		<= '0';
+			end loop;
 			end if;
 		else
 		

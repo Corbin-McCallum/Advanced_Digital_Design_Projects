@@ -87,7 +87,7 @@ architecture logic of seven_segment_agent is
 	
 	-- concatenation function
 	function concat_function(
-		config:		in	seven_segment_digit_array
+		config:		in		seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
@@ -124,7 +124,21 @@ begin
 		constant high_bit: natural := 4 * digit + 3;
 		constant low_bit:  natural := 4 * digit;
 	begin
-		hex_digits(digit) <= get_hex_digit(to_integer(unsigned(data_to_driver(high_bit downto low_bit))), lamp_mode);
+		process(control, data_to_driver) is
+		begin
+			if decimal_support and control(1) = '1'
+						and digit = seven_segment_digit_array'high then
+				hex_digits(digit) <= lamps_off(lamp_mode);
+			else
+				hex_digits(digit) <= get_hex_digit(
+												to_integer(
+													unsigned(
+														data_to_driver(high_bit downto low_bit)
+													)
+												), lamp_mode
+											);
+			end if;
+		end process;
 	end generate;
 
 	-- Clock trigger

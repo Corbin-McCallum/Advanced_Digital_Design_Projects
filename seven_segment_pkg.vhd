@@ -49,6 +49,10 @@ package seven_segment_pkg is
 		lamp_mode:		in 	lamp_configuration := default_lamp_config
 	) return seven_segment_config;
 	
+	function lamps_negative (
+		lamp_mode:		in	lamp_configuration := default_lamp_config
+	) return seven_segment_config;
+	
 end package seven_segment_pkg;
 
 package body seven_segment_pkg is
@@ -65,8 +69,8 @@ package body seven_segment_pkg is
 
 	
 	function get_hex_digit (
-			digit:			in 	hex_digit;
-			lamp_mode:		in 	lamp_configuration := default_lamp_config
+			digit:		in 	hex_digit;
+			lamp_mode:	in 	lamp_configuration := default_lamp_config
 	) return seven_segment_config
 	is
 	begin
@@ -87,5 +91,15 @@ package body seven_segment_pkg is
 		return ( others => '0' );
 	end function lamps_off;
 	
+	function lamps_negative (
+		lamp_mode:		in	lamp_configuration := default_lamp_config
+	) return seven_segment_config
+	is
+	begin
+		if lamp_mode = common_anode then
+			return ( g => '0', others => '1' );
+		end if;
+		return ( g => '1', others => '0' );
+	end function lamps_negative;
 	
 end package body seven_segment_pkg;

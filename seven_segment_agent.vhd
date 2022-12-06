@@ -1,4 +1,11 @@
-generic (
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+use work.seven_segment_pkg.all;
+
+entity seven_segment_agent is
+	generic (
 		lamp_mode: 		lamp_configuration := common_anode;
 		decimal_support:	boolean 	:= true;
 		implementer: 		natural	:= 200;
@@ -26,6 +33,8 @@ architecture logic of seven_segment_agent is
 	signal data: 		std_logic_vector(31 downto 0);
 	signal features:	std_logic_vector(31 downto 0);
 	
+
+	
 	-- procedures
 	function get_features
 		return std_logic_vector
@@ -52,18 +61,33 @@ architecture logic of seven_segment_agent is
 	
 	-- functions
 	function concat_function(
-		config:		in	seven_segment_output
+		config:		in	seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
 	begin
-		for i in seven_segment_output'range loop
+		for i in seven_segment_digit_array'range loop
 			ret(7*i + 6 downto 7*i) := config(i).g & config(i).f & config(i).e &	config(i).d & config(i).c & config(i).b & config(i).a;
 		end loop;
 
 		return ret;
 	end function concat_function;
+	
+	signal hex_digits: seven_segment_digit_array;
+	constant outputs_off: seven_segment_digit_array
+				:= ( others => lamps_off(lamp_mode) );
 begin
+
+	lamps <= concat_function(hex_digits) when control(0) = '1'
+				else concat_function(outputs_off);
+
+	-- populate digits array
+	assign_digit: for digit in seven_segment_digit_array'range generate
+		constant high_bit: natural := 4 * digit + 3;
+		constant low_bit:  natural := 4 * digit;
+	begin
+		hex_digits(digit) <= get_hex_digit(to_integer(unsigned(data(high_bit downto low_bit))), lamp_mode);
+	end generate;
 
 	-- Clock trigger
 	change_trigger: process(clk) is

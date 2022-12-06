@@ -7,7 +7,7 @@ use work.seven_segment_pkg.all;
 entity seven_segment_agent is
 	generic (
 		lamp_mode: 		lamp_configuration := common_anode;
-		decimal_support:	boolean := true;
+		decimal_support:	boolean 	:= true;
 		implementer: 		natural	:= 200;
 		revision: 		natural	:= 0;
 		signed_support: 	boolean	:= true;
@@ -29,9 +29,9 @@ end entity seven_segment_agent;
 
 architecture logic of seven_segment_agent is
 	-- signals
-	signal control: 	std_logic_vector(31 downto 0);
-	signal data: 		std_logic_vector(31 downto 0);
-	signal features:	std_logic_vector(31 downto 0);
+	signal control: 	std_logic_vector(31 downto 0) := (others => '0');
+	signal data: 		std_logic_vector(31 downto 0) := (others => '0');
+	--signal features:	std_logic_vector(31 downto 0);
 	
 
 	
@@ -55,6 +55,10 @@ architecture logic of seven_segment_agent is
 		
 		if blank_zeros_support then
 			ret(2) := '1';
+		end if;
+		
+		if signed_support then
+			ret(1) := '1';
 		end if;
 		return ret;
 	end function get_features;
@@ -107,7 +111,11 @@ begin
 			elsif write = '1' then
 				case address is
 					when "00" => data <= writedata;
-					when "01" => control <= writedata;
+					when "01" => --control <= writedata;
+							if decimal_support then
+								control(1) <= writedata(1);
+							end if;
+							control(0) <= writedata(0);
 					when others => null;
 				end case;
 			end if;

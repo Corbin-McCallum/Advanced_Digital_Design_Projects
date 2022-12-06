@@ -6,17 +6,19 @@ use work.seven_segment_config.all;
 
 entity seven_segment_agent is
 	generic (
-		lamp_mode: 		lamp_configuration;
-		decimal_support:	boolean;
-		implementer: 		natural;
-		revision: 		natural
+		lamp_mode: 			lamp_configuration;
+		decimal_support:		boolean;
+		implementer: 			natural;
+		revision: 			natural;
+		signed_support: 		boolean;
+		blank_zeros_support		boolean
 	);
 	port (
 		-- Input ports
-		clk:				in	std_logic;
-		reset_n:			in	std_logic;
-		address:			in	std_logic_vector(1 downto 0);
-		read:				in	std_logic;
+		clk:			in	std_logic;
+		reset_n:		in	std_logic;
+		address:		in	std_logic_vector(1 downto 0);
+		read:			in	std_logic;
 		write:			in	std_logic;
 		writedata:		in	std_logic_vector(31 downto 0);
 		-- Output ports
@@ -52,12 +54,17 @@ begin
 				control <= (others => '0');
 				data <= (others => '0');
 			elsif read = '1' then
-			elsif write = '1' then
 				case address is
 					when "00" =>
 					when "01" =>
 					when "10" =>
 					when "11" =>
+				end case;
+			elsif write = '1' then
+				case address is
+					when "00" =>
+					when "01" =>
+					when others => null;
 				end case;
 			end if;
 		

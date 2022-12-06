@@ -1,4 +1,4 @@
-library ieee
+library ieee;
 use ieee.std_logic_1164.all;
 
 package seven_segment_config is 

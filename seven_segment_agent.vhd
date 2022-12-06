@@ -32,10 +32,8 @@ architecture logic of seven_segment_agent is
 	signal control: 	std_logic_vector(31 downto 0) := (others => '0');
 	signal data: 		std_logic_vector(31 downto 0) := (others => '0');
 	--signal features:	std_logic_vector(31 downto 0);
-	
-
-	
-	-- procedures
+		
+	-- get features function 
 	function get_features
 		return std_logic_vector
 	is
@@ -63,7 +61,31 @@ architecture logic of seven_segment_agent is
 		return ret;
 	end function get_features;
 	
-	-- functions
+	--double dabble function
+	function to_bcd (
+		data_value: in std_logic_vector(15 downto 0)
+	) return std_logic_vector
+	is
+	variable ret: std_logic_vector(19 downto 0);
+	variable temp: std_logic_vector(data_value'range);
+	begin
+		temp := data_value;
+		ret := (others => '0');
+		for i in data_value'range loop
+			for j in 0 to ret'length/4 - 1 loop
+				if unsigned(ret(4*j + 3 downto 4*j)) >= 5 then
+					ret(4*j + 3 downto 4*j) :=
+							std_logic_vector(
+								unsigned(ret(4*j + 3 downto 4 * j)) + 3);
+				end if;
+			end loop;
+			ret := ret(ret'high -1 downto 0) & temp(temp'high);
+			temp := temp(temp'high - 1 downto 0) & '0';
+		end loop;
+		return ret;
+	end function to_bcd;
+	
+	-- concatenation function
 	function concat_function(
 		config:		in	seven_segment_digit_array
 	) return std_logic_vector
@@ -80,7 +102,19 @@ architecture logic of seven_segment_agent is
 	signal hex_digits: seven_segment_digit_array;
 	constant outputs_off: seven_segment_digit_array
 				:= ( others => lamps_off(lamp_mode) );
+				
+	signal data_to_driver:	std_logic_vector(31 downto 0);
 begin
+
+	data_driver: process(data, control) is
+	begin
+		if decimal_support and control(1) = '1' then
+			data_to_driver(31 downto 20) <= (others => '0');
+			data_to_driver(19 downto  0) <= to_bcd(data(15 downto 0));
+		else
+			data_to_driver <= data;
+		end if;
+	end process data_driver;
 
 	lamps <= concat_function(hex_digits) when control(0) = '1'
 				else concat_function(outputs_off);
@@ -90,7 +124,7 @@ begin
 		constant high_bit: natural := 4 * digit + 3;
 		constant low_bit:  natural := 4 * digit;
 	begin
-		hex_digits(digit) <= get_hex_digit(to_integer(unsigned(data(high_bit downto low_bit))), lamp_mode);
+		hex_digits(digit) <= get_hex_digit(to_integer(unsigned(data_to_driver(high_bit downto low_bit))), lamp_mode);
 	end generate;
 
 	-- Clock trigger

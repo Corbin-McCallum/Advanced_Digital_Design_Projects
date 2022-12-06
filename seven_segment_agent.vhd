@@ -87,7 +87,7 @@ architecture logic of seven_segment_agent is
 	
 	-- concatenation function
 	function concat_function(
-		config:		in		seven_segment_digit_array
+		config:		in	seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
@@ -107,10 +107,18 @@ architecture logic of seven_segment_agent is
 begin
 
 	data_driver: process(data, control) is
+		variable intermediate: std_logic_vector(15 downto 0);
+		variable twos: signed(15 downto 0);
 	begin
 		if decimal_support and control(1) = '1' then
+			if signed_support and control(3) = '1' and data(15) = '1' then
+				twos := -signed(data(15 downto 0));
+				intermediate := std_logic_vector(twos);
+			else
+				intermediate := data(15 downto 0);
+			end if;
 			data_to_driver(31 downto 20) <= (others => '0');
-			data_to_driver(19 downto  0) <= to_bcd(data(15 downto 0));
+			data_to_driver(19 downto  0) <= to_bcd(intermediate(15 downto 0));
 		else
 			data_to_driver <= data;
 		end if;
@@ -124,11 +132,22 @@ begin
 		constant high_bit: natural := 4 * digit + 3;
 		constant low_bit:  natural := 4 * digit;
 	begin
-		process(control, data_to_driver) is
+		process(control, data_to_driver, data) is
 		begin
-			if decimal_support and control(1) = '1'
+			if decimal_support and signed_support and control(3) = '1'
+						and digit = seven_segment_digit_array'high
+						and data(15) = '1' and control(1) = '1' then
+				-- only if we have decimal support, signed support
+				-- we are showing negative decimal numbers, we are
+				-- a negative number and we are on the leftmost lamp
+				hex_digits(digit) <= lamps_negative(lamp_mode);
+				
+			elsif decimal_support and control(1) = '1'
 						and digit = seven_segment_digit_array'high then
+				-- only if we have decimal support, we are showing decimal numbers
+				-- and we are the leftmost lamp
 				hex_digits(digit) <= lamps_off(lamp_mode);
+
 			else
 				hex_digits(digit) <= get_hex_digit(
 												to_integer(
@@ -162,6 +181,9 @@ begin
 					when "01" => --control <= writedata;
 							if decimal_support then
 								control(1) <= writedata(1);
+							end if;
+							if decimal_support and signed_support then
+								control(3) <= write_data(3);
 							end if;
 							control(0) <= writedata(0);
 					when others => null;

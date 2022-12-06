@@ -11,7 +11,7 @@ entity seven_segment_agent is
 		implementer: 			natural	:= 200;
 		revision: 			natural	:= 0;
 		signed_support: 		boolean;
-		blank_zeros_support	boolean
+		blank_zeros_support:		boolean
 	);
 	port (
 		-- Input ports

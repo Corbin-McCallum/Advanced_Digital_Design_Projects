@@ -7,7 +7,7 @@ use work.seven_segment_pkg.all;
 entity seven_segment_agent is
 	generic (
 		lamp_mode: 		lamp_configuration := common_anode;
-		decimal_support:	boolean	:= true;
+		decimal_support:	boolean := true;
 		implementer: 		natural	:= 200;
 		revision: 		natural	:= 0;
 		signed_support: 	boolean	:= true;
@@ -87,7 +87,7 @@ architecture logic of seven_segment_agent is
 	
 	-- concatenation function
 	function concat_function(
-		config:		in		seven_segment_digit_array
+		config:		in	seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
@@ -104,6 +104,10 @@ architecture logic of seven_segment_agent is
 				:= ( others => lamps_off(lamp_mode) );
 				
 	signal data_to_driver:	std_logic_vector(31 downto 0);
+	--
+	type leading_zeros is array (seven_segment_digit_array'range) of boolean;
+	signal have_seen_only_zeros: leading_zeros;
+
 begin
 
 	data_driver: process(data, control) is
@@ -131,14 +135,9 @@ begin
 	assign_digit: for digit in seven_segment_digit_array'reverse_range generate
 		constant high_bit: natural := 4 * digit + 3;
 		constant low_bit:  natural := 4 * digit;
-		type leading_zeros is array (seven_segment_digit_array'range) of boolean;
-		signal have_seen_only_zeros: leading_zeros;
 	begin
 		process(control, data_to_driver, data, have_seen_only_zeros) is
 		begin
-			if digit = seven_segment_digit_array'high then
-				have_seen_only_zeros(digit) <= true;
-			end if;
 			if decimal_support and signed_support and control(3) = '1'
 						and digit = seven_segment_digit_array'high
 						and data(15) = '1' and control(1) = '1' then
@@ -146,21 +145,27 @@ begin
 				-- we are showing negative decimal numbers, we are
 				-- a negative number and we are on the leftmost lamp
 				hex_digits(digit) <= lamps_negative(lamp_mode);
+				have_seen_only_zeros(digit) <= true;
 				
 			elsif decimal_support and control(1) = '1'
 						and digit = seven_segment_digit_array'high then
 				-- only if we have decimal support, we are showing decimal numbers
 				-- and we are the leftmost lamp
 				hex_digits(digit) <= lamps_off(lamp_mode);
+				have_seen_only_zeros(digit) <= true;
 
 			elsif decimal_support and blank_zeros_support
-						and control(2) = '1' and digit > 0
+						and control(2) = '1' and control(1) = '1'
+						and digit > 0
 						and digit < seven_segment_digit_array'high
 						and have_seen_only_zeros(digit + 1)
 						and data_to_driver(high_bit downto low_bit) = "0000" then
+				-- blank leading zeros if needed
 				hex_digits(digit) <= lamps_off(lamp_mode);
 				have_seen_only_zeros(digit) <= true;
+
 			else
+				-- everything else
 				have_seen_only_zeros(digit) <= false;
 				hex_digits(digit) <= get_hex_digit(
 												to_integer(

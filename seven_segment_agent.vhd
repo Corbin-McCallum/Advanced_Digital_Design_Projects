@@ -7,7 +7,7 @@ use work.seven_segment_pkg.all;
 entity seven_segment_agent is
 	generic (
 		lamp_mode: 		lamp_configuration := common_anode;
-		decimal_support:	boolean := true;
+		decimal_support:	boolean	:= true;
 		implementer: 		natural	:= 200;
 		revision: 		natural	:= 0;
 		signed_support: 	boolean	:= true;
@@ -87,7 +87,7 @@ architecture logic of seven_segment_agent is
 	
 	-- concatenation function
 	function concat_function(
-		config:		in	seven_segment_digit_array
+		config:		in		seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
@@ -128,12 +128,17 @@ begin
 				else concat_function(outputs_off);
 
 	-- populate digits array
-	assign_digit: for digit in seven_segment_digit_array'range generate
+	assign_digit: for digit in seven_segment_digit_array'reverse_range generate
 		constant high_bit: natural := 4 * digit + 3;
 		constant low_bit:  natural := 4 * digit;
+		type leading_zeros is array (seven_segment_digit_array'range) of boolean;
+		signal have_seen_only_zeros: leading_zeros;
 	begin
-		process(control, data_to_driver, data) is
+		process(control, data_to_driver, data, have_seen_only_zeros) is
 		begin
+			if digit = seven_segment_digit_array'high then
+				have_seen_only_zeros(digit) <= true;
+			end if;
 			if decimal_support and signed_support and control(3) = '1'
 						and digit = seven_segment_digit_array'high
 						and data(15) = '1' and control(1) = '1' then
@@ -148,7 +153,15 @@ begin
 				-- and we are the leftmost lamp
 				hex_digits(digit) <= lamps_off(lamp_mode);
 
+			elsif decimal_support and blank_zeros_support
+						and control(2) = '1' and digit > 0
+						and digit < seven_segment_digit_array'high
+						and have_seen_only_zeros(digit + 1)
+						and data_to_driver(high_bit downto low_bit) = "0000" then
+				hex_digits(digit) <= lamps_off(lamp_mode);
+				have_seen_only_zeros(digit) <= true;
 			else
+				have_seen_only_zeros(digit) <= false;
 				hex_digits(digit) <= get_hex_digit(
 												to_integer(
 													unsigned(
@@ -184,6 +197,9 @@ begin
 							end if;
 							if decimal_support and signed_support then
 								control(3) <= writedata(3);
+							end if;
+							if decimal_support and blank_zeros_support then
+								control(2) <= writedata(2);
 							end if;
 							control(0) <= writedata(0);
 					when others => null;

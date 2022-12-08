@@ -23,7 +23,7 @@ entity seven_segment_agent is
 		writedata:	in	std_logic_vector(31 downto 0);
 		-- Output ports
 		readdata:	out	std_logic_vector(31 downto 0);
-		lamps:		out 	std_logic_vector(41 downto 0)
+		digits:		out 	std_logic_vector(41 downto 0)
 	);
 end entity seven_segment_agent;
 
@@ -87,7 +87,7 @@ architecture logic of seven_segment_agent is
 	
 	-- concatenation function
 	function concat_function(
-		config:		in	seven_segment_digit_array
+		config:		in		seven_segment_digit_array
 	) return std_logic_vector
 	is
 		variable ret:	std_logic_vector(41 downto 0);
@@ -128,7 +128,7 @@ begin
 		end if;
 	end process data_driver;
 
-	lamps <= concat_function(hex_digits) when control(0) = '1'
+	digits <= concat_function(hex_digits) when control(0) = '1'
 				else concat_function(outputs_off);
 
 	-- populate digits array
